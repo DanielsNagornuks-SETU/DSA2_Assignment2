@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="applied_computing.setu.PrimaryController">
-   <children>
-      <Label text="Primary View" />
-      <Button fx:id="primaryButton" text="Switch to Secondary View" onAction="#switchToSecondary"/>
-   </children>
+<VBox alignment="TOP_CENTER" prefHeight="773.0" prefWidth="1197.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="applied_computing.setu.PrimaryController">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
+   <children>
+      <Pane fx:id="pane" cacheShape="false" centerShape="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" scaleShape="false">
+         <children>
+            <ImageView fx:id="imageView" cache="true" fitHeight="700.0" fitWidth="1200.0">
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+               <image>
+                  <Image url="@U-Bahn_Wien.png" />
+               </image>
+            </ImageView>
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Pane>
+
+      <HBox alignment="TOP_CENTER" prefHeight="72.0" prefWidth="1158.0" spacing="20">
+         <children>
+            <ChoiceBox prefWidth="150.0" value="Select mode">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Select all routes" />
+                     <String fx:value="Shortest route" />
+                     <String fx:value="Shortest route with penalty for changing lines" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0">
+              <content>
+                 <VBox prefHeight="200.0" prefWidth="100.0"/>
+              </content>
+            </ScrollPane>
+            <Button mnemonicParsing="false" text="Select stations to be visited" />
+            <ScrollPane layoutX="474.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+               </content>
+            </ScrollPane>
+            <Button layoutX="638.0" layoutY="10.0" mnemonicParsing="false" text="Select stations to be avoided" />
+            <Button mnemonicParsing="false" text="Find a route" />
+         </children>
+      </HBox>
+
+   </children>
 </VBox>
