@@ -80,6 +80,7 @@ public class PrimaryController {
                 // Stop selecting
                 isVisitedButtonSelected = false;
                 visitedStationsButton.setText("Start Selecting Visited Stations");
+                setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
                 endPointButton.setDisable(false);
                 findRouteButton.setDisable(false);
@@ -98,6 +99,7 @@ public class PrimaryController {
                 // Stop selecting
                 isAvoidingButtonSelected = false;
                 avoidingStationsButton.setText("Start Selecting Avoided Stations");
+                setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
                 endPointButton.setDisable(false);
                 findRouteButton.setDisable(false);
@@ -152,8 +154,10 @@ public class PrimaryController {
             // If multiple selection is not allowed, update the start or end point label
             if (isStartPointSelected) {
                 startPointLabel.setText(formattedStationName);
+                selectedRadioButton.setSelected(false);
             } else {
                 endPointLabel.setText(formattedStationName);
+                selectedRadioButton.setSelected(false);
             }
 
             // Disable radio buttons when only one selection is allowed
