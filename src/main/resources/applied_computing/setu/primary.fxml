@@ -69,7 +69,7 @@
                <tooltip><Tooltip text="Kettenbrückengasse" /></tooltip>
             </RadioButton>
 
-            <RadioButton fx:id="Karlsplatz" layoutX="584.0" layoutY="445.0" prefHeight="13.0" prefWidth="16.0">
+            <RadioButton fx:id="Karlsplatz" layoutX="583.0" layoutY="446.3" prefHeight="13.0" prefWidth="16.0" scaleX="0.75" scaleY="1.2">
                <tooltip><Tooltip text="Karlsplatz" /></tooltip>
             </RadioButton>
 
@@ -193,6 +193,235 @@
 
 <!--U3 LINE END-->
 
+<!--LINE CHANGE-->
+
+<!--U6 LINE START-->
+
+            <RadioButton fx:id="Floridsdorf" layoutX="665.0" layoutY="56.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Floridsdorf" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Neue_Donau" layoutX="624.0" layoutY="94.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Neue Donau" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Handelskai" layoutX="584.0" layoutY="131.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Handelskai" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Dresdner_Straße" layoutX="539.0" layoutY="131.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Dresdner Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Jägerstraße" layoutX="501.0" layoutY="131.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Jägerstraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Nussdorfer_Straße" layoutX="409.0" layoutY="131.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Nussdorfer Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Währinger_Straße_Volksoper" layoutX="373.0" layoutY="165.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Währinger Straße-Volksoper" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Michelbeuern" layoutX="337.0" layoutY="198.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Michelbeuern" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Alser_Straße" layoutX="337.0" layoutY="230.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Alser Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Josefstädter_Straße" layoutX="337.0" layoutY="257.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Josefstädter Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Thaliastraße" layoutX="337.0" layoutY="288.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Thaliastraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Burggasse" layoutX="337.0" layoutY="319.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Burggasse" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Gumpendorfer_Straße" layoutX="337.0" layoutY="400.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Gumpendorfer Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Niederhofstraße" layoutX="337.0" layoutY="489.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Niederhofstraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Bahnhof_Meidling" layoutX="337.0" layoutY="514.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Bahnhof Meidling" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Tscherttegasse" layoutX="337.0" layoutY="541.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Tscherttegasse" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Am_Schöpfwerk" layoutX="337.0" layoutY="569.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Am Schöpfwerk" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Alterlaa" layoutX="337.0" layoutY="596.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Alterlaa" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Erlaaer_Straße" layoutX="337.0" layoutY="622.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Erlaaer Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Perfektastraße" layoutX="337.0" layoutY="649.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Perfektastraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Siebenhirten" layoutX="337.0" layoutY="677.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Siebenhirten" /></tooltip>
+            </RadioButton>
+
+<!--U6 LINE END-->
+
+<!--LINE CHANGE-->
+
+<!--U1 LINE START-->
+
+            <RadioButton fx:id="Leopoldau" layoutX="941.0" layoutY="8.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Leopoldau" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Großfeldsiedlung" layoutX="915.0" layoutY="33.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Großfeldsiedlung" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Aderklaaer_Straße" layoutX="891.0" layoutY="55.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Aderklaaer Straße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Rennbahnweg" layoutX="866.0" layoutY="78.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Rennbahnweg" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Kagraner_Platz" layoutX="840.0" layoutY="101.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Kagraner Platz" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Kagran" layoutX="815.0" layoutY="124.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Kagran" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Alte_Donau" layoutX="789.0" layoutY="150.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Alte Donau" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Kaisermühlen_VIC" layoutX="766.0" layoutY="170.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Kaisermühlen VIC" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Donauinsel" layoutX="740.0" layoutY="195.0" prefHeight="0.0" prefWidth="16.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Donauinsel" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Vorgartenstraße" layoutX="713.0" layoutY="219.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Vorgartenstraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Praterstern" layoutX="686.0" layoutY="244.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Praterstern" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Nestroyplatz" layoutX="657.0" layoutY="270.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Nestroyplatz" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Taubstummengasse" layoutX="582.0" layoutY="483.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Taubstummengasse" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Hauptbahnhof" layoutX="582.0" layoutY="503.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Südtiroler Platz-Hauptbahnhof" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Keplerplatz" layoutX="583.0" layoutY="527.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Keplerplatz" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Reumannplatz" layoutX="583.0" layoutY="547.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Reumannplatz" /></tooltip>
+            </RadioButton>
+
+<!--U1 LINE END-->
+
+<!--LINE CHANGE-->
+
+<!--U2 LINE START-->
+
+            <RadioButton fx:id="Seestadt" layoutX="1147.0" layoutY="178.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Seestadt" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Aspern_Nord" layoutX="1116.0" layoutY="178.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Aspern Nord" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Hausfeldstraße" layoutX="1085.0" layoutY="178.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Hausfeldstraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Aspernstraße" layoutX="1034.0" layoutY="225.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Aspernstraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Donauspital" layoutX="1003.0" layoutY="253.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Donauspital" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Hardeggasse" layoutX="962.0" layoutY="253.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Hardeggasse" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Stadlau" layoutX="938.0" layoutY="276.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Stadlau" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Donaustadtbrücke" layoutX="911.0" layoutY="301.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Donaustadtbrücke" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Messe_Prater" layoutX="758.0" layoutY="244.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Messe-Prater" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Schottentor" layoutX="533.0" layoutY="280.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Schottentor" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Rathaus" layoutX="501.0" layoutY="310.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Rathaus" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Museumsquartier" layoutX="501.0" layoutY="413.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Museumsquartier" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Stadion" layoutX="834.0" layoutY="314.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Stadion" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Taborstraße" layoutX="627.0" layoutY="244.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Taborstraße" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Krieau" layoutX="795.0" layoutY="278.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Krieau" /></tooltip>
+            </RadioButton>
+
+            <RadioButton fx:id="Donaumarina" layoutX="880.0" layoutY="330.0" scaleX="0.75" scaleY="0.75">
+               <tooltip><Tooltip text="Donaumarina" /></tooltip>
+            </RadioButton>
+
+            <!--U2 LINE END-->
 
          </children>
          <VBox.margin>
