@@ -1,14 +1,20 @@
 package applied_computing.setu;
 
+import javafx.animation.TranslateTransition;
+import javafx.geometry.*;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
 
 public class PrimaryController {
     @FXML
@@ -39,7 +45,37 @@ public class PrimaryController {
     @FXML
     private void initialize() {
         setAllRadioButtonsDisabled(true);
+
+        pane.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((obsWindow, oldWindow, newWindow) -> {
+                    if (newWindow != null) {
+                        Stage stage = (Stage) newWindow;
+                        stage.widthProperty().addListener((o, oldWidth, newWidth) -> {
+                            double width = newWidth.doubleValue(); // Safely unwrap the newWidth
+
+                            double newLeftMargin;
+                            if (width < 1300) {
+                                newLeftMargin = 20; // fixed margin if window is small
+                            } else {
+                                newLeftMargin = width * 0.1; // dynamic margin if window is large
+                            }
+
+                            // Create TranslateTransition for smooth movement
+                            TranslateTransition translate = new TranslateTransition(Duration.millis(100), pane); // 300 ms for smooth transition
+                            translate.setToX(newLeftMargin); // Set new X translation to simulate the margin shift
+
+                            // Start the animation
+                            translate.play();
+                        });
+                    }
+                });
+            }
+        });
     }
+
+
+
 
     public void setAllRadioButtonsDisabled(boolean disable) {
         setRadioButtonsDisabledRecursive(pane, disable);
