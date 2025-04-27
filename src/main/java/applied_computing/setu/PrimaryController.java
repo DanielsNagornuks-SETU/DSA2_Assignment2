@@ -130,9 +130,11 @@ public class PrimaryController {
         // Check the source of the event and determine the corresponding VBox
         if (isVisitedButtonSelected) {
             targetVBox = stationsVBox; // Use stationsVBox if visitedStationsButton is pressed
+            selectedRadioButton.setStyle("-fx-mark-color: green;");
         }
         else {
             targetVBox = stationsAvoidVbox;
+            selectedRadioButton.setStyle("-fx-mark-color: red;");
         }
 
         // If multiple selection is allowed
