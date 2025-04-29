@@ -19,8 +19,20 @@ public class Graph<T> {
     }
 
     // BFS
-    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination) {
-        return null;
+    public ArrayList<GraphNode<T>> shortestPathByNodes(ArrayList<ArrayList<GraphNode<T>>> partialPaths, ArrayList<GraphNode<T>> encountered, GraphNode<T> destination) {
+        if(partialPaths.isEmpty()) return null; //Search failed
+        ArrayList<GraphNode<T>> nextPath=partialPaths.remove(0); //Get first item (next path to consider) off agenda
+        GraphNode<T> currentNode=nextPath.get(0); //The first item in the next path is the current node
+        if(currentNode.getValue().equals(destination.getValue())) return nextPath; //If that's the goal, we've found our path (so return it)
+        if(encountered==null) encountered=new ArrayList<>(); //First node considered in search so create new (empty) encountered list
+        encountered.add(currentNode); //Record current node as encountered so it isn't revisited again
+        for(GraphNode<T> adjNode : currentNode.getAdjacencyList().keySet()) //For each adjacent node
+            if(!encountered.contains(adjNode)) { //If it hasn't already been encountered
+                ArrayList<GraphNode<T>> newPath=new ArrayList<>(nextPath); //Create a new path list as a copy of the current/next path
+                newPath.add(0,adjNode); //And add the adjacent node to the front of the new copy
+                partialPaths.add(newPath); //Add the new path to the end of agenda (end->BFS!)
+            }
+        return shortestPathByNodes(partialPaths,encountered,destination);
     }
 
     // DFS
