@@ -27,9 +27,9 @@ public class GraphNode<T> {
         this.adjacencyList = adjacencyList;
     }
 
-    public void connectNode(GraphNode<T> target, double distance) {
-        adjacencyList.put(target, distance);
-        target.getAdjacencyList().put(this, distance);
+    public void connectNode(GraphNode<T> target, double weight) {
+        adjacencyList.put(target, weight);
+        target.getAdjacencyList().put(this, weight);
     }
 
 }
