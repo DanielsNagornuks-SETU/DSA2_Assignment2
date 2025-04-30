@@ -45,27 +45,26 @@ public class PrimaryController {
     @FXML
     private void initialize() {
         setAllRadioButtonsDisabled(true);
+        centerMap();
+    }
 
+    private void centerMap() {
         pane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.windowProperty().addListener((obsWindow, oldWindow, newWindow) -> {
                     if (newWindow != null) {
                         Stage stage = (Stage) newWindow;
                         stage.widthProperty().addListener((o, oldWidth, newWidth) -> {
-                            double width = newWidth.doubleValue(); // Safely unwrap the newWidth
-
+                            double currentWidth = newWidth.doubleValue();
+                            double defaultMargin = 1250;
                             double newLeftMargin;
-                            if (width < 1250) {
-                                newLeftMargin = 0; // fixed margin if window is small
+                            if (currentWidth < defaultMargin) {
+                                newLeftMargin = 0;
                             } else {
-                                newLeftMargin = (width - 1250) * 0.5; // dynamic margin if window is large
+                                newLeftMargin = (currentWidth - defaultMargin) * 0.5;
                             }
-
-                            // Create TranslateTransition for smooth movement
-                            TranslateTransition translate = new TranslateTransition(Duration.millis(1), pane); // 300 ms for smooth transition
-                            translate.setToX(newLeftMargin); // Set new X translation to simulate the margin shift
-
-                            // Start the animation
+                            TranslateTransition translate = new TranslateTransition(Duration.millis(1), pane);
+                            translate.setToX(newLeftMargin);
                             translate.play();
                         });
                     }
@@ -73,8 +72,6 @@ public class PrimaryController {
             }
         });
     }
-
-
 
 
     public void setAllRadioButtonsDisabled(boolean disable) {
