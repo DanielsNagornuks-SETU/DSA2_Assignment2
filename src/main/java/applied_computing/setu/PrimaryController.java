@@ -55,14 +55,14 @@ public class PrimaryController {
                             double width = newWidth.doubleValue(); // Safely unwrap the newWidth
 
                             double newLeftMargin;
-                            if (width < 1300) {
-                                newLeftMargin = 20; // fixed margin if window is small
+                            if (width < 1250) {
+                                newLeftMargin = 0; // fixed margin if window is small
                             } else {
-                                newLeftMargin = width * 0.1; // dynamic margin if window is large
+                                newLeftMargin = (width - 1250) * 0.5; // dynamic margin if window is large
                             }
 
                             // Create TranslateTransition for smooth movement
-                            TranslateTransition translate = new TranslateTransition(Duration.millis(100), pane); // 300 ms for smooth transition
+                            TranslateTransition translate = new TranslateTransition(Duration.millis(1), pane); // 300 ms for smooth transition
                             translate.setToX(newLeftMargin); // Set new X translation to simulate the margin shift
 
                             // Start the animation
