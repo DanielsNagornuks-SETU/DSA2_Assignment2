@@ -7,7 +7,7 @@ public class GraphNode<T> {
     private T value;
     private HashMap<GraphNode<T>, Double> adjacencyList = new HashMap<>();
 
-    GraphNode(T value) {
+    public GraphNode(T value) {
         this.value = value;
     }
 
