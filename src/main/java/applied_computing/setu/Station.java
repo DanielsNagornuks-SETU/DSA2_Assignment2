@@ -1,14 +1,14 @@
 package applied_computing.setu;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Station {
 
     private String name;
-    private LinkedList<Byte> lanes;
+    private byte[] lanes;
 
-    public Station(String name, LinkedList<Byte> lanes) {
+    public Station(String name, byte[] lanes) {
         this.name = name;
         this.lanes = lanes;
     }
@@ -21,11 +21,11 @@ public class Station {
         this.name = name;
     }
 
-    public LinkedList<Byte> getLanes() {
+    public byte[] getLanes() {
         return lanes;
     }
 
-    public void setLanes(LinkedList<Byte> lanes) {
+    public void setLanes(byte[] lanes) {
         this.lanes = lanes;
     }
 
@@ -33,12 +33,24 @@ public class Station {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Station station = (Station) o;
-        return Objects.equals(name, station.name) && Objects.equals(lanes, station.lanes);
+        return Objects.equals(name, station.name) && Arrays.equals(lanes, station.lanes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, lanes);
+        return Objects.hash(name, Arrays.hashCode(lanes));
+    }
+
+    @Override
+    public String toString() {
+        String lanesStr = "";
+        for (byte lane : lanes) {
+            lanesStr += lane + " ";
+        }
+        return "Station{" +
+                "name='" + name + '\'' +
+                ", lanes=" + lanesStr +
+                '}';
     }
 
 }
