@@ -33,7 +33,7 @@ public class Station {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Station station = (Station) o;
-        return Objects.equals(name, station.name) && Arrays.equals(lanes, station.lanes);
+        return Objects.equals(name, station.name);
     }
 
     @Override
