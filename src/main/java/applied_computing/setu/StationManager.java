@@ -39,8 +39,19 @@ public class StationManager {
         return stations;
     }
 
-    public static HashMap<RadioButton, GraphNode<Station>> getRadioButtonMap(RadioButton[] radioButtons) {
-        return null;
+    public static HashMap<RadioButton, GraphNode<Station>> getRadioButtonMap(RadioButton[] radioButtonArray, ArrayList<Station> stations) {
+        HashMap<RadioButton, GraphNode<Station>> radioButtonMap = new HashMap<>();
+        for (RadioButton radioButton : radioButtonArray) {
+            Station stationFound = null;
+            for (Station station : stations) {
+                if (station.getName().equals(radioButton.getTooltip().getText())) {
+                    stationFound = station;
+                    break;
+                }
+            }
+            radioButtonMap.put(radioButton, new GraphNode<>(stationFound));
+        }
+        return radioButtonMap;
     }
 
 }
