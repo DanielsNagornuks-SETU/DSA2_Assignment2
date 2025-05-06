@@ -2,7 +2,15 @@ package applied_computing.setu;
 
 import javafx.animation.TranslateTransition;
 import javafx.geometry.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -37,16 +45,97 @@ public class PrimaryController {
     private VBox stationsVBox;
     @FXML
     private VBox stationsAvoidVbox;
+    private Graph graph=new Graph();
     private boolean isStartPointSelected = false;
-    private boolean isMultipleSelectionAllowed = false;// Flag for multiple selection
+    private boolean isMultipleSelectionAllowed = false;
     private boolean isVisitedButtonSelected = false;
     private boolean isAvoidingButtonSelected = false;
+    private ArrayList<Station> stationList;
+    private HashMap<RadioButton,GraphNode<Station>> stationHashMap;
 
     @FXML
     private void initialize() {
         setAllRadioButtonsDisabled(true);
         centerMap();
+        stationList=StationManager.loadStations();
+        stationHashMap=StationManager.getRadioButtonMap(getAllRadioButtons(),stationList);
+        connectNodes();
     }
+
+
+    @FXML
+    private RadioButton[] getAllRadioButtons() {
+        List<RadioButton> radioButtons = new ArrayList<>();
+
+        for (Node node : pane.getChildren()) {
+            if (node instanceof RadioButton) {
+                radioButtons.add((RadioButton) node);
+            }
+        }
+
+        return radioButtons.toArray(new RadioButton[0]);
+    }
+
+    private void connectNodes(){
+        for (GraphNode<Station> node : stationHashMap.values()) {
+            node.setAdjacencyList(getAdjacencyListForANode(node));
+        }
+    }
+
+    private HashMap<GraphNode<Station>, Double> getAdjacencyListForANode(GraphNode<Station> node) {
+        HashMap<GraphNode<Station>, Double> adjacencyList = new HashMap<>();
+
+        Station currentStation = node.getValue();
+        if (currentStation == null) {
+            System.err.println("Null node in:  " + node.getNodeValue());
+            return adjacencyList;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/applied_computing/setu/adjacencies.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length < 3) continue;
+
+                String from = parts[0].trim();
+                String to = parts[1].trim();
+                double weight = Double.parseDouble(parts[2].trim());
+
+                if (currentStation.getName().equals(from)) {
+                    GraphNode<Station> neighbor = findGraphNodeByName(to);
+                    if (neighbor != null) {
+                        adjacencyList.put(neighbor, weight);
+                    }
+                } else if (currentStation.getName().equals(to)) {
+                    GraphNode<Station> neighbor = findGraphNodeByName(from);
+                    if (neighbor != null) {
+                        adjacencyList.put(neighbor, weight);
+                    }
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return adjacencyList;
+    }
+
+
+
+    private GraphNode<Station> findGraphNodeByName(String fxId) {
+        String stationName = fxId.replace("_", " ");
+
+        for (GraphNode<Station> node : stationHashMap.values()) {
+            Station station = node.getValue();
+            if (station != null && station.getName().equalsIgnoreCase(stationName)) {
+                return node;
+            }
+        }
+
+        return null; // if no match found
+    }
+
+
 
     private void centerMap() {
         pane.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -232,6 +321,54 @@ public class PrimaryController {
             }
         }
     }
+
+    @FXML
+    private void findRoute() {
+        String startName = startPointLabel.getText().replace("_", " ").trim();
+        String endName = endPointLabel.getText().replace("_", " ").trim();
+
+        RadioButton startButton = null;
+        RadioButton endButton = null;
+
+        for (RadioButton rb : getAllRadioButtons()) {
+            String stationName = rb.getTooltip().getText().replace("_", " ").trim(); // Normalize name
+
+            if (stationName.equalsIgnoreCase(startName)) {
+                startButton = rb;
+            }
+            if (stationName.equalsIgnoreCase(endName)) {
+                endButton = rb;
+            }
+        }
+
+        if (startButton == null || endButton == null) {
+            System.out.println("Start or End station not found!");
+            return;
+        }
+
+        GraphNode<Station> startNode = stationHashMap.get(startButton);
+        GraphNode<Station> endNode = stationHashMap.get(endButton);
+
+        if (startNode == null || endNode == null) {
+            System.out.println("Graph nodes not associated with buttons!");
+            return;
+        }
+
+        ArrayList<ArrayList<GraphNode<Station>>> allPaths = graph.allPathsBetweenNodes(startNode, null, endNode);
+
+        if (allPaths == null || allPaths.isEmpty()) {
+            System.out.println("No paths found between stations.");
+        } else {
+            for (ArrayList<GraphNode<Station>> path : allPaths) {
+                System.out.println("Path:");
+                for (GraphNode<Station> node : path) {
+                    System.out.print(node.getValue().getName() + " -> ");
+                }
+                System.out.println("END");
+            }
+        }
+    }
+
 
 
 

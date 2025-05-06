@@ -6,6 +6,15 @@ public class GraphNode<T> {
 
     private T value;
     private HashMap<GraphNode<T>, Double> adjacencyList = new HashMap<>();
+    private double nodeValue=Double.MAX_VALUE;
+
+    public double getNodeValue() {
+        return nodeValue;
+    }
+
+    public void setNodeValue(double nodeValue) {
+        this.nodeValue = nodeValue;
+    }
 
     public GraphNode(T value) {
         this.value = value;
