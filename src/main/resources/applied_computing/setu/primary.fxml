@@ -191,7 +191,7 @@
             </RadioButton>
 
             <RadioButton fx:id="Kardinal_Nagl_Platz" layoutX="758.0" layoutY="357.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">
-               <tooltip><Tooltip text="Kardinal Nagl Platz" /></tooltip>
+               <tooltip><Tooltip text="Kardinal-Nagl-Platz" /></tooltip>
             </RadioButton>
 
             <RadioButton fx:id="Schlachthausgasse" layoutX="787.0" layoutY="383.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">
@@ -249,11 +249,11 @@
             </RadioButton>
 
             <RadioButton fx:id="Währinger_Straße_Volksoper" layoutX="373.0" layoutY="165.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">
-               <tooltip><Tooltip text="Währinger Straße-Volksoper" /></tooltip>
+               <tooltip><Tooltip text="Währinger Straße - Volksoper" /></tooltip>
             </RadioButton>
 
             <RadioButton fx:id="Michelbeuern" layoutX="337.0" layoutY="198.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">
-               <tooltip><Tooltip text="Michelbeuern" /></tooltip>
+               <tooltip><Tooltip text="Michelbeuern - AKH" /></tooltip>
             </RadioButton>
 
             <RadioButton fx:id="Alser_Straße" layoutX="337.0" layoutY="230.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">
@@ -367,7 +367,7 @@
             </RadioButton>
 
             <RadioButton fx:id="Hauptbahnhof" layoutX="582.0" layoutY="503.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">
-               <tooltip><Tooltip text="Südtiroler Platz-Hauptbahnhof" /></tooltip>
+               <tooltip><Tooltip text="Südtiroler Platz - Hauptbahnhof" /></tooltip>
             </RadioButton>
 
             <RadioButton fx:id="Keplerplatz" layoutX="583.0" layoutY="527.0" onAction="#oneRadioButtonPressingWaiting" scaleX="0.75" scaleY="0.75">

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
@@ -77,7 +78,10 @@ public class PrimaryController {
     }
 
     private void connectNodes(){
-        for (GraphNode<Station> node : stationHashMap.values()) {
+        for (Map.Entry<RadioButton, GraphNode<Station>> entry : stationHashMap.entrySet()) {
+            GraphNode<Station> node = entry.getValue();
+            RadioButton key = entry.getKey();
+            System.out.println(key.getTooltip().getText()+":"+node.getValue());
             node.setAdjacencyList(getAdjacencyListForANode(node));
         }
     }
@@ -87,7 +91,7 @@ public class PrimaryController {
 
         Station currentStation = node.getValue();
         if (currentStation == null) {
-            System.err.println("Null node in:  " + node.getNodeValue());
+            System.err.println("Null node in:  " + node.getValue());
             return adjacencyList;
         }
 
@@ -246,7 +250,7 @@ public class PrimaryController {
         RadioButton selectedRadioButton = (RadioButton) event.getSource();
 
         // Format the station name (replace underscores with spaces)
-        String formattedStationName = selectedRadioButton.getId().replace("_", " ");
+        String formattedStationName = selectedRadioButton.getTooltip().getText().trim();
 
         VBox targetVBox;
         // Check the source of the event and determine the corresponding VBox
@@ -324,14 +328,14 @@ public class PrimaryController {
 
     @FXML
     private void findRoute() {
-        String startName = startPointLabel.getText().replace("_", " ").trim();
-        String endName = endPointLabel.getText().replace("_", " ").trim();
+        String startName = startPointLabel.getText();
+        String endName = endPointLabel.getText();
 
         RadioButton startButton = null;
         RadioButton endButton = null;
 
         for (RadioButton rb : getAllRadioButtons()) {
-            String stationName = rb.getTooltip().getText().replace("_", " ").trim(); // Normalize name
+            String stationName = rb.getTooltip().getText(); // Normalize name
 
             if (stationName.equalsIgnoreCase(startName)) {
                 startButton = rb;
