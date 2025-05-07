@@ -1,20 +1,18 @@
 package applied_computing.setu;
 
 import javafx.animation.TranslateTransition;
-import javafx.geometry.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.image.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -44,21 +42,23 @@ public class PrimaryController {
     private VBox stationsVBox;
     @FXML
     private VBox stationsAvoidVbox;
-    private Graph graph=new Graph();
+    @FXML
+    private ImageView imageView;
+    private Graph graph = new Graph();
     private boolean isStartPointSelected = false;
     private boolean isMultipleSelectionAllowed = false;
     private boolean isVisitedButtonSelected = false;
     private boolean isAvoidingButtonSelected = false;
     private ArrayList<Station> stationList;
-    private HashMap<RadioButton,GraphNode<Station>> stationHashMap;
+    private HashMap<RadioButton, GraphNode<Station>> stationHashMap;
     Map<GraphNode<Station>, RadioButton> reverseMap = new HashMap<>();
 
     @FXML
     private void initialize() {
         setAllRadioButtonsDisabled(true);
         centerMap();
-        stationList=StationManager.loadStations();
-        stationHashMap=StationManager.getRadioButtonMap(getAllRadioButtons(),stationList);
+        stationList = StationManager.loadStations();
+        stationHashMap = StationManager.getRadioButtonMap(getAllRadioButtons(), stationList);
         for (Map.Entry<RadioButton, GraphNode<Station>> entry : stationHashMap.entrySet()) {
             reverseMap.put(entry.getValue(), entry.getKey());
         }
@@ -79,11 +79,11 @@ public class PrimaryController {
         return radioButtons.toArray(new RadioButton[0]);
     }
 
-    private void connectNodes(){
+    private void connectNodes() {
         for (Map.Entry<RadioButton, GraphNode<Station>> entry : stationHashMap.entrySet()) {
             GraphNode<Station> node = entry.getValue();
             RadioButton key = entry.getKey();
-            System.out.println(key.getTooltip().getText()+":"+node.getValue());
+            System.out.println(key.getTooltip().getText() + ":" + node.getValue());
             node.setAdjacencyList(getAdjacencyListForANode(node));
         }
     }
@@ -120,12 +120,11 @@ public class PrimaryController {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            e.printStackTrace();
+            System.out.println("Error reading adjacency list: " + e.getMessage());
         }
 
         return adjacencyList;
     }
-
 
 
     private GraphNode<Station> findGraphNodeByName(String fxId) {
@@ -140,7 +139,6 @@ public class PrimaryController {
 
         return null; // if no match found
     }
-
 
 
     private void centerMap() {
@@ -188,6 +186,7 @@ public class PrimaryController {
     @FXML
     private void selectingOneStation(javafx.event.ActionEvent event) {
         clearLines();
+        toGrayScale(false);
         // Disable buttons as needed
         startPointButton.setDisable(true);
         endPointButton.setDisable(true);
@@ -246,7 +245,6 @@ public class PrimaryController {
     }
 
 
-
     @FXML
     private void oneRadioButtonPressingWaiting(javafx.event.ActionEvent event) {
         // Get the source of the event (the clicked RadioButton)
@@ -260,8 +258,7 @@ public class PrimaryController {
         if (isVisitedButtonSelected) {
             targetVBox = stationsVBox; // Use stationsVBox if visitedStationsButton is pressed
             selectedRadioButton.setStyle("-fx-mark-color: green;");
-        }
-        else {
+        } else {
             targetVBox = stationsAvoidVbox;
             selectedRadioButton.setStyle("-fx-mark-color: red;");
         }
@@ -375,17 +372,17 @@ public class PrimaryController {
             }
         }
         drawLines(allPaths);
+        toGrayScale(true);
     }
 
     @FXML
     private void drawLines(ArrayList<ArrayList<GraphNode<Station>>> solutionPath) {
         clearLines();
-        Color[] path_colors = new Color[] {
-                Color.BLUE,
+        Color[] path_colors = new Color[]{
                 Color.YELLOW,
-                Color.BLACK,
                 Color.CYAN,
                 Color.MAGENTA,
+                Color.RED,
         };
         Random rand = new Random();
         for (ArrayList<GraphNode<Station>> path : solutionPath) {
@@ -414,11 +411,18 @@ public class PrimaryController {
     }
 
     @FXML
-    private void clearLines(){
+    private void clearLines() {
         pane.getChildren().removeIf(node -> node instanceof Line);
     }
 
-
+    private void toGrayScale(boolean state) {
+        if(state) {
+            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("grayImage.png"))));
+        }
+        else{
+            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("U-Bahn_Wien.png"))));
+        }
+    }
 
 
 }
