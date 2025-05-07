@@ -10,6 +10,7 @@ import java.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.*;
@@ -44,6 +45,8 @@ public class PrimaryController {
     private VBox stationsAvoidVbox;
     @FXML
     private ImageView imageView;
+    @FXML
+    private ChoiceBox<String> selectedModeChoiceBox;
     private Graph graph = new Graph();
     private boolean isStartPointSelected = false;
     private boolean isMultipleSelectionAllowed = false;
@@ -358,12 +361,11 @@ public class PrimaryController {
             return;
         }
 
-        ArrayList<ArrayList<GraphNode<Station>>> allPaths = graph.allPathsBetweenNodes(startNode, null, endNode);
-
-        if (allPaths == null || allPaths.isEmpty()) {
+        ArrayList<ArrayList<GraphNode<Station>>> solutionPathArray = new ArrayList<>();
+        if (solutionPathArray == null || solutionPathArray.isEmpty()) {
             System.out.println("No paths found between stations.");
         } else {
-            for (ArrayList<GraphNode<Station>> path : allPaths) {
+            for (ArrayList<GraphNode<Station>> path : solutionPathArray) {
                 System.out.println("Path:");
                 for (GraphNode<Station> node : path) {
                     System.out.print(node.getValue().getName() + " -> ");
@@ -371,7 +373,19 @@ public class PrimaryController {
                 System.out.println("END");
             }
         }
-        drawLines(allPaths);
+        if(selectedModeChoiceBox.getValue().equals("Select all routes")){
+            solutionPathArray = graph.allPathsBetweenNodes(startNode, null, endNode);
+        }
+        else if(selectedModeChoiceBox.getValue().equals("Shortest route")){
+            ArrayList<GraphNode<Station>> startPath = new ArrayList<>();
+            startPath.add(startNode);
+            ArrayList<ArrayList<GraphNode<Station>>> partialPaths = new ArrayList<>();
+            partialPaths.add(startPath);
+
+            ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
+            solutionPathArray.add(shortest);
+        }
+        drawLines(solutionPathArray);
         toGrayScale(true);
     }
 
