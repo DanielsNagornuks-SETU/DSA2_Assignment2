@@ -9,10 +9,7 @@ import java.util.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -47,6 +44,12 @@ public class PrimaryController {
     private ImageView imageView;
     @FXML
     private ChoiceBox<String> selectedModeChoiceBox;
+    @FXML
+    private Button routeCycleButton;
+    @FXML
+    private TextField costPenaltyField;
+    ArrayList<ArrayList<GraphNode<Station>>> multiplePathArrayList;
+    private int pathCounter = 0;
     private Graph graph = new Graph();
     private boolean isStartPointSelected = false;
     private boolean isMultipleSelectionAllowed = false;
@@ -66,6 +69,23 @@ public class PrimaryController {
             reverseMap.put(entry.getValue(), entry.getKey());
         }
         connectNodes();
+        costPenaltyField.setVisible(false);
+        routeCycleButton.setVisible(false);
+        selectedModeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals("Select all routes")) {
+                routeCycleButton.setVisible(true);
+                costPenaltyField.setVisible(false);
+            }
+            else if(newValue.equals("Shortest route")) {
+                costPenaltyField.setVisible(true);
+                routeCycleButton.setVisible(false);
+            }
+            else{
+                costPenaltyField.setVisible(false);
+                routeCycleButton.setVisible(false);
+            }
+        });
+
     }
 
 
@@ -130,12 +150,10 @@ public class PrimaryController {
     }
 
 
-    private GraphNode<Station> findGraphNodeByName(String fxId) {
-        String stationName = fxId.replace("_", " ");
-
+    private GraphNode<Station> findGraphNodeByName(String name) {
         for (GraphNode<Station> node : stationHashMap.values()) {
             Station station = node.getValue();
-            if (station != null && station.getName().equalsIgnoreCase(stationName)) {
+            if (station != null && station.getName().equalsIgnoreCase(name)) {
                 return node;
             }
         }
@@ -188,6 +206,7 @@ public class PrimaryController {
 
     @FXML
     private void selectingOneStation(javafx.event.ActionEvent event) {
+        selectedModeChoiceBox.setDisable(false);
         clearLines();
         toGrayScale(false);
         // Disable buttons as needed
@@ -361,11 +380,10 @@ public class PrimaryController {
             return;
         }
 
-        ArrayList<ArrayList<GraphNode<Station>>> solutionPathArray = new ArrayList<>();
-        if (solutionPathArray == null || solutionPathArray.isEmpty()) {
+        if (multiplePathArrayList == null || multiplePathArrayList.isEmpty()) {
             System.out.println("No paths found between stations.");
         } else {
-            for (ArrayList<GraphNode<Station>> path : solutionPathArray) {
+            for (ArrayList<GraphNode<Station>> path : multiplePathArrayList) {
                 System.out.println("Path:");
                 for (GraphNode<Station> node : path) {
                     System.out.print(node.getValue().getName() + " -> ");
@@ -374,36 +392,36 @@ public class PrimaryController {
             }
         }
         if(selectedModeChoiceBox.getValue().equals("Select all routes")){
-            solutionPathArray = graph.allPathsBetweenNodes(startNode, null, endNode);
+            multiplePathArrayList = graph.allPathsBetweenNodes(startNode, null, endNode);
         }
-        else if(selectedModeChoiceBox.getValue().equals("Shortest route")){
+        else if(selectedModeChoiceBox.getValue().equals("Least nodes")){
             ArrayList<GraphNode<Station>> startPath = new ArrayList<>();
             startPath.add(startNode);
             Queue<ArrayList<GraphNode<Station>>> partialPaths = new LinkedList<>();
             partialPaths.add(startPath);
 
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
-            solutionPathArray.add(shortest);
+            drawLines(shortest);
         }
-        drawLines(solutionPathArray);
         toGrayScale(true);
     }
 
     @FXML
-    private void drawLines(ArrayList<ArrayList<GraphNode<Station>>> solutionPath) {
+    private void cycleMultiplePaths() {
+        if (multiplePathArrayList == null || multiplePathArrayList.isEmpty()) return;
+        drawLines(multiplePathArrayList.get(pathCounter));
+        pathCounter++;
+        if (pathCounter >= multiplePathArrayList.size()) {
+            pathCounter = 0;
+        }
+    }
+
+    @FXML
+    private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
         clearLines();
-        Color[] path_colors = new Color[]{
-                Color.YELLOW,
-                Color.CYAN,
-                Color.MAGENTA,
-                Color.RED,
-        };
-        Random rand = new Random();
-        for (ArrayList<GraphNode<Station>> path : solutionPath) {
-            Color color = path_colors[rand.nextInt(path_colors.length)];
-            for (int i = 0; i < path.size() - 1; i++) {
-                GraphNode<Station> fromNode = path.get(i);
-                GraphNode<Station> toNode = path.get(i + 1);
+            for (int i = 0; i < solutionPath.size() - 1; i++) {
+                GraphNode<Station> fromNode = solutionPath.get(i);
+                GraphNode<Station> toNode = solutionPath.get(i + 1);
 
                 RadioButton fromButton = reverseMap.get(fromNode);
                 RadioButton toButton = reverseMap.get(toNode);
@@ -415,13 +433,12 @@ public class PrimaryController {
                     double endY = toButton.getLayoutY() + toButton.getHeight() / 2;
 
                     Line line = new Line(startX, startY, endX, endY);
-                    line.setStroke(color);
+                    line.setStroke(Color.RED);
                     line.setStrokeWidth(5);
 
                     pane.getChildren().add(line);
                 }
             }
-        }
     }
 
     @FXML
