@@ -379,7 +379,7 @@ public class PrimaryController {
         else if(selectedModeChoiceBox.getValue().equals("Shortest route")){
             ArrayList<GraphNode<Station>> startPath = new ArrayList<>();
             startPath.add(startNode);
-            ArrayList<ArrayList<GraphNode<Station>>> partialPaths = new ArrayList<>();
+            Queue<ArrayList<GraphNode<Station>>> partialPaths = new LinkedList<>();
             partialPaths.add(startPath);
 
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
