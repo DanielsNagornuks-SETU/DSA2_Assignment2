@@ -153,6 +153,8 @@ public class Graph<T> {
                     adjNode.setNodeValue(Double.MAX_VALUE);
                     adjNode.setReturnNode(null);
                 }
+                waypointFound.setNodeValue(Double.MAX_VALUE);
+                waypointFound.setReturnNode(null);
                 return shortestPath;
             }
             for (GraphNode<Station> adjNode : currentNode.getAdjacencyList().keySet()) {

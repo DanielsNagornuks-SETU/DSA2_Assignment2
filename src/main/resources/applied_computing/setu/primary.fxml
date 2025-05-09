@@ -26,7 +26,7 @@
       <HBox alignment="TOP_CENTER" layoutX="30.0" layoutY="726.0" prefHeight="30.0" prefWidth="1158.0" spacing="10.0">
          <children>
             <Button fx:id="routeCycleButton" mnemonicParsing="false" onAction="#cycleMultiplePaths" prefHeight="26.0" prefWidth="131.0" text="Show Next Route" />
-            <TextField fx:id="costPenaltyField" />
+            <TextField fx:id="costPenaltyField" text="0" />
             <ChoiceBox fx:id="selectedModeChoiceBox" prefWidth="150.0" value="Travel mode">
                <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -478,13 +478,13 @@
          <children>
             <ScrollPane prefHeight="200.0" prefWidth="200.0">
                <content>
-                  <VBox fx:id="stationsVBox" prefHeight="200.0" prefWidth="100.0" />
+                  <VBox fx:id="stationsVBox" prefHeight="200.0" prefWidth="180.0" />
                </content>
             </ScrollPane>
             <Button fx:id="visitedStationsButton" mnemonicParsing="false" onAction="#selectingOneStation" text="Select stations to be visited" />
             <ScrollPane layoutX="474.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
                <content>
-                  <VBox fx:id="stationsAvoidVbox" prefHeight="200.0" prefWidth="100.0" />
+                  <VBox fx:id="stationsAvoidVbox" prefHeight="200.0" prefWidth="180.0" />
                </content>
             </ScrollPane>
             <Button fx:id="avoidingStationsButton" layoutX="638.0" layoutY="10.0" mnemonicParsing="false" onAction="#selectingOneStation" text="Select stations to be avoided" />

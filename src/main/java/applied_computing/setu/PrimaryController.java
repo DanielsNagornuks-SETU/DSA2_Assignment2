@@ -58,6 +58,8 @@ public class PrimaryController {
     private ArrayList<Station> stationList;
     private HashMap<RadioButton, GraphNode<Station>> stationHashMap;
     Map<GraphNode<Station>, RadioButton> reverseMap = new HashMap<>();
+    private HashSet<GraphNode<Station>> waypointStations = new HashSet<>();
+    private HashSet<GraphNode<Station>> stationsToAvoid = new HashSet<>();
 
     @FXML
     private void initialize() {
@@ -276,12 +278,15 @@ public class PrimaryController {
         String formattedStationName = selectedRadioButton.getTooltip().getText().trim();
 
         VBox targetVBox;
+        HashSet<GraphNode<Station>> targetStations;
         // Check the source of the event and determine the corresponding VBox
         if (isVisitedButtonSelected) {
             targetVBox = stationsVBox; // Use stationsVBox if visitedStationsButton is pressed
+            targetStations = waypointStations;
             selectedRadioButton.setStyle("-fx-mark-color: green;");
         } else {
             targetVBox = stationsAvoidVbox;
+            targetStations = stationsToAvoid;
             selectedRadioButton.setStyle("-fx-mark-color: red;");
         }
 
@@ -289,16 +294,21 @@ public class PrimaryController {
         if (isMultipleSelectionAllowed) {
             // Create a new label for the station
             Label stationLabel = new Label(formattedStationName);
-
+            GraphNode<Station> stationNode = new GraphNode<>(new Station(formattedStationName, new byte[]{}));
             // Check if the RadioButton is selected or deselected
             if (selectedRadioButton.isSelected()) {
                 // Add the label to the corresponding VBox (if not already added)
                 if (!isLabelInVBox(stationLabel, targetVBox)) {
                     targetVBox.getChildren().add(stationLabel);
+                    targetStations.add(stationNode);
                 }
             } else {
                 // Remove the label from the corresponding VBox if the RadioButton is deselected
                 removeLabelFromVBox(formattedStationName, targetVBox);
+                targetStations.remove(stationNode);
+            }
+            for (GraphNode<Station> node : targetStations) {
+                System.out.println(node.getValue());
             }
         } else {
             // If multiple selection is not allowed, update the start or end point label
@@ -403,7 +413,7 @@ public class PrimaryController {
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
             drawLines(shortest);
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
-            drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), new HashSet<>(), new HashSet<>()));
+            drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
         }
         toGrayScale(true);
     }
@@ -421,26 +431,22 @@ public class PrimaryController {
     @FXML
     private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
         clearLines();
-            for (int i = 0; i < solutionPath.size() - 1; i++) {
-                GraphNode<Station> fromNode = solutionPath.get(i);
-                GraphNode<Station> toNode = solutionPath.get(i + 1);
-
-                RadioButton fromButton = reverseMap.get(fromNode);
-                RadioButton toButton = reverseMap.get(toNode);
-
-                if (fromButton != null && toButton != null) {
-                    double startX = fromButton.getLayoutX() + fromButton.getWidth() / 2;
-                    double startY = fromButton.getLayoutY() + fromButton.getHeight() / 2;
-                    double endX = toButton.getLayoutX() + toButton.getWidth() / 2;
-                    double endY = toButton.getLayoutY() + toButton.getHeight() / 2;
-
-                    Line line = new Line(startX, startY, endX, endY);
-                    line.setStroke(Color.RED);
-                    line.setStrokeWidth(5);
-
-                    pane.getChildren().add(line);
-                }
+        for (int i = 0; i < solutionPath.size() - 1; i++) {
+            GraphNode<Station> fromNode = solutionPath.get(i);
+            GraphNode<Station> toNode = solutionPath.get(i + 1);
+            RadioButton fromButton = reverseMap.get(fromNode);
+            RadioButton toButton = reverseMap.get(toNode);
+            if (fromButton != null && toButton != null) {
+                double startX = fromButton.getLayoutX() + fromButton.getWidth() / 2;
+                double startY = fromButton.getLayoutY() + fromButton.getHeight() / 2;
+                double endX = toButton.getLayoutX() + toButton.getWidth() / 2;
+                double endY = toButton.getLayoutY() + toButton.getHeight() / 2;
+                Line line = new Line(startX, startY, endX, endY);
+                line.setStroke(Color.RED);
+                line.setStrokeWidth(5);
+                pane.getChildren().add(line);
             }
+        }
     }
 
     @FXML

@@ -38,7 +38,7 @@ public class Station {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, Arrays.hashCode(lanes));
+        return Objects.hash(name);
     }
 
     @Override

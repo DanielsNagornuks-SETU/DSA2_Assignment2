@@ -1,6 +1,7 @@
 package applied_computing.setu;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GraphNode<T> implements Comparable<GraphNode<T>> {
 
@@ -53,6 +54,25 @@ public class GraphNode<T> implements Comparable<GraphNode<T>> {
     @Override
     public int compareTo(GraphNode other) {
         return Double.compare(this.nodeValue, other.nodeValue);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        GraphNode<?> graphNode = (GraphNode<?>) o;
+        return Objects.equals(value, graphNode.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return "GraphNode{" +
+                "value=" + value +
+                '}';
     }
 
 }
