@@ -1,6 +1,7 @@
 package applied_computing.setu;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Graph<T> {
@@ -66,6 +67,14 @@ public class Graph<T> {
 
     // Dijkstra's
     public ArrayList<GraphNode<T>> shortestPathByWeight(GraphNode<T> source, GraphNode<T> destination) {
+        source.setNodeValue(0);
+        ArrayList<GraphNode<T>> considered = new ArrayList<>();
+        PriorityQueue<GraphNode<T>> agenda = new PriorityQueue<>();
+        agenda.offer(source);
+        GraphNode<T> currentNode = source;
+        do{
+            currentNode = agenda.poll();
+        } while (!agenda.isEmpty());
         return null;
     }
 
