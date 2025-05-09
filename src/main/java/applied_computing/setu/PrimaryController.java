@@ -403,7 +403,7 @@ public class PrimaryController {
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
             drawLines(shortest);
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
-            drawLines(graph.shortestPathByWeight(startNode, endNode));
+            drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), new HashSet<>(), new HashSet<>()));
         }
         toGrayScale(true);
     }

@@ -6,6 +6,7 @@ import java.io.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class StationManager {
 
@@ -52,6 +53,17 @@ public class StationManager {
             radioButtonMap.put(radioButton, new GraphNode<>(stationFound));
         }
         return radioButtonMap;
+    }
+
+    public static boolean stationsShareLanes(Station station1, Station station2) {
+        for (byte lane : station1.getLanes()) {
+            for (byte lane2 : station2.getLanes()) {
+                if (lane == lane2) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

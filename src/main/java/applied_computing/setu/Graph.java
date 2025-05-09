@@ -63,7 +63,7 @@ public class Graph<T> {
         return result;
     }
 
-    // Dijkstra's
+    /* Generic method for implementing Dijkstra's algorithm */
     public ArrayList<GraphNode<T>> shortestPathByWeight(GraphNode<T> source, GraphNode<T> destination) {
         source.setNodeValue(0);
         HashSet<GraphNode<T>> considered = new HashSet<>();
@@ -94,6 +94,73 @@ public class Graph<T> {
             for (GraphNode<T> adjNode : currentNode.getAdjacencyList().keySet()) {
                 if (!considered.contains(adjNode)) {
                     double newWeight = currentNode.getNodeValue() + currentNode.getAdjacencyList().get(adjNode);
+                    if (newWeight < adjNode.getNodeValue()) {
+                        adjNode.setNodeValue(newWeight);
+                        adjNode.setReturnNode(currentNode);
+                        agenda.offer(adjNode);
+                    }
+                }
+            }
+        } while (!agenda.isEmpty());
+        return null;
+    }
+
+    /* Interfacing method */
+    public ArrayList<GraphNode<Station>> shortestPathBetweenStations(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, HashSet<GraphNode<Station>> waypoints, HashSet<GraphNode<Station>> stationsToAvoid) {
+        ArrayList<GraphNode<Station>> route = new ArrayList<>();
+        ArrayList<GraphNode<Station>> currentRoute;
+        while (!waypoints.isEmpty()) {
+            currentRoute = shortestPathToOneOfStations(source, waypoints, laneChangePenalty, stationsToAvoid);
+            if (currentRoute == null) return null;
+            source = currentRoute.remove(currentRoute.size() - 1);
+            waypoints.remove(source);
+            route.addAll(currentRoute);
+        }
+        waypoints.add(destination);
+        currentRoute = shortestPathToOneOfStations(source, waypoints, laneChangePenalty, stationsToAvoid);
+        if (currentRoute == null) return null;
+        route.addAll(currentRoute);
+        return route;
+    }
+
+    public ArrayList<GraphNode<Station>> shortestPathToOneOfStations(GraphNode<Station> source, HashSet<GraphNode<Station>> waypoints, double laneChangePenalty, HashSet<GraphNode<Station>> stationsToAvoid) {
+        source.setNodeValue(0);
+        HashSet<GraphNode<Station>> considered = new HashSet<>(stationsToAvoid);
+        PriorityQueue<GraphNode<Station>> agenda = new PriorityQueue<>();
+        agenda.offer(source);
+        GraphNode<Station> currentNode;
+        do {
+            currentNode = agenda.poll();
+            if (considered.contains(currentNode)) continue;
+            considered.add(currentNode);
+            GraphNode<Station> waypointFound = null;
+            for (GraphNode<Station> waypoint : waypoints)
+                if (currentNode.getValue().equals(waypoint.getValue())) {
+                    waypointFound = waypoint;
+                }
+            if (waypointFound != null) {
+                ArrayList<GraphNode<Station>> shortestPath = new ArrayList<>();
+                shortestPath.add(currentNode);
+                while (!currentNode.getValue().equals(source.getValue())) {
+                    currentNode = currentNode.getReturnNode();
+                    shortestPath.add(0, currentNode);
+                }
+                for (GraphNode<Station> adjNode : agenda) {
+                    adjNode.setNodeValue(Double.MAX_VALUE);
+                    adjNode.setReturnNode(null);
+                }
+                for (GraphNode<Station> adjNode : considered) {
+                    adjNode.setNodeValue(Double.MAX_VALUE);
+                    adjNode.setReturnNode(null);
+                }
+                return shortestPath;
+            }
+            for (GraphNode<Station> adjNode : currentNode.getAdjacencyList().keySet()) {
+                if (!considered.contains(adjNode)) {
+                    double penalty = 0;
+                    if (!currentNode.getValue().equals(source.getValue()) && !StationManager.stationsShareLanes(adjNode.getValue(), currentNode.getReturnNode().getValue()))
+                        penalty = laneChangePenalty;
+                    double newWeight = currentNode.getNodeValue() + currentNode.getAdjacencyList().get(adjNode) + penalty;
                     if (newWeight < adjNode.getNodeValue()) {
                         adjNode.setNodeValue(newWeight);
                         adjNode.setReturnNode(currentNode);
