@@ -402,6 +402,8 @@ public class PrimaryController {
 
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
             drawLines(shortest);
+        } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
+            drawLines(graph.shortestPathByWeight(startNode, endNode));
         }
         toGrayScale(true);
     }
