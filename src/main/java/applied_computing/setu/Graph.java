@@ -1,8 +1,6 @@
 package applied_computing.setu;
 
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph<T> {
 
@@ -68,12 +66,41 @@ public class Graph<T> {
     // Dijkstra's
     public ArrayList<GraphNode<T>> shortestPathByWeight(GraphNode<T> source, GraphNode<T> destination) {
         source.setNodeValue(0);
-        ArrayList<GraphNode<T>> considered = new ArrayList<>();
+        HashSet<GraphNode<T>> considered = new HashSet<>();
         PriorityQueue<GraphNode<T>> agenda = new PriorityQueue<>();
         agenda.offer(source);
-        GraphNode<T> currentNode = source;
-        do{
+        GraphNode<T> currentNode;
+        do {
             currentNode = agenda.poll();
+            if (considered.contains(currentNode)) continue;
+            considered.add(currentNode);
+            if (currentNode.getValue().equals(destination.getValue())) {
+                ArrayList<GraphNode<T>> shortestPath = new ArrayList<>();
+                shortestPath.add(currentNode);
+                while (!currentNode.getValue().equals(source.getValue())) {
+                    currentNode = currentNode.getReturnNode();
+                    shortestPath.add(0, currentNode);
+                }
+                for (GraphNode<T> adjNode : agenda) {
+                    adjNode.setNodeValue(Double.MAX_VALUE);
+                    adjNode.setReturnNode(null);
+                }
+                for (GraphNode<T> adjNode : considered) {
+                    adjNode.setNodeValue(Double.MAX_VALUE);
+                    adjNode.setReturnNode(null);
+                }
+                return shortestPath;
+            }
+            for (GraphNode<T> adjNode : currentNode.getAdjacencyList().keySet()) {
+                if (!considered.contains(adjNode)) {
+                    double newWeight = currentNode.getNodeValue() + currentNode.getAdjacencyList().get(adjNode);
+                    if (newWeight < adjNode.getNodeValue()) {
+                        adjNode.setNodeValue(newWeight);
+                        adjNode.setReturnNode(currentNode);
+                        agenda.offer(adjNode);
+                    }
+                }
+            }
         } while (!agenda.isEmpty());
         return null;
     }
