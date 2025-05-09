@@ -106,9 +106,10 @@ public class Graph<T> {
     }
 
     /* Interfacing method */
-    public ArrayList<GraphNode<Station>> shortestPathBetweenStations(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, HashSet<GraphNode<Station>> waypoints, HashSet<GraphNode<Station>> stationsToAvoid) {
+    public ArrayList<GraphNode<Station>> shortestPathBetweenStations(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, HashSet<GraphNode<Station>> waypointStations, HashSet<GraphNode<Station>> stationsToAvoid) {
         ArrayList<GraphNode<Station>> route = new ArrayList<>();
         ArrayList<GraphNode<Station>> currentRoute;
+        HashSet<GraphNode<Station>>waypoints = new HashSet<>(waypointStations);
         while (!waypoints.isEmpty()) {
             currentRoute = shortestPathToOneOfStations(source, waypoints, laneChangePenalty, stationsToAvoid);
             if (currentRoute == null) return null;

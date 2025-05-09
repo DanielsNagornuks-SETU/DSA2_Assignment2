@@ -307,9 +307,6 @@ public class PrimaryController {
                 removeLabelFromVBox(formattedStationName, targetVBox);
                 targetStations.remove(stationNode);
             }
-            for (GraphNode<Station> node : targetStations) {
-                System.out.println(node.getValue());
-            }
         } else {
             // If multiple selection is not allowed, update the start or end point label
             if (isStartPointSelected) {
