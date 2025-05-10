@@ -77,16 +77,20 @@ public class PrimaryController {
             if(newValue.equals("Select all routes")) {
                 routeCycleButton.setVisible(true);
                 costPenaltyField.setVisible(false);
+                findRoute();
             }
             else if(newValue.equals("Shortest route")) {
                 costPenaltyField.setVisible(true);
                 routeCycleButton.setVisible(false);
+                findRoute();
             }
             else{
                 costPenaltyField.setVisible(false);
                 routeCycleButton.setVisible(false);
+                findRoute();
             }
         });
+        costPenaltyField.setOnKeyReleased(event -> {findRoute();});
 
     }
 
@@ -108,7 +112,6 @@ public class PrimaryController {
         for (Map.Entry<RadioButton, GraphNode<Station>> entry : stationHashMap.entrySet()) {
             GraphNode<Station> node = entry.getValue();
             RadioButton key = entry.getKey();
-            System.out.println(key.getTooltip().getText() + ":" + node.getValue());
             node.setAdjacencyList(getAdjacencyListForANode(node));
         }
     }
@@ -118,7 +121,6 @@ public class PrimaryController {
 
         Station currentStation = node.getValue();
         if (currentStation == null) {
-            System.err.println("Null node in:  " + node.getValue());
             return adjacencyList;
         }
 
@@ -229,6 +231,7 @@ public class PrimaryController {
         } else if (event.getSource() == visitedStationsButton) {
             // Toggle visited stations selection
             if (isVisitedButtonSelected) {
+                findRoute();
                 // Stop selecting
                 isVisitedButtonSelected = false;
                 visitedStationsButton.setText("Start Selecting Visited Stations");
@@ -248,6 +251,7 @@ public class PrimaryController {
         } else if (event.getSource() == avoidingStationsButton) {
             // Toggle avoiding stations selection
             if (isAvoidingButtonSelected) {
+                findRoute();
                 // Stop selecting
                 isAvoidingButtonSelected = false;
                 avoidingStationsButton.setText("Start Selecting Avoided Stations");
@@ -327,6 +331,7 @@ public class PrimaryController {
             visitedStationsButton.setDisable(false);
             avoidingStationsButton.setDisable(false);
         }
+        findRoute();
     }
 
     // Utility method to check if the label is already in the VBox
@@ -375,7 +380,6 @@ public class PrimaryController {
         }
 
         if (startButton == null || endButton == null) {
-            System.out.println("Start or End station not found!");
             return;
         }
 
@@ -383,23 +387,11 @@ public class PrimaryController {
         GraphNode<Station> endNode = stationHashMap.get(endButton);
 
         if (startNode == null || endNode == null) {
-            System.out.println("Graph nodes not associated with buttons!");
             return;
-        }
-
-        if (multiplePathArrayList == null || multiplePathArrayList.isEmpty()) {
-            System.out.println("No paths found between stations.");
-        } else {
-            for (ArrayList<GraphNode<Station>> path : multiplePathArrayList) {
-                System.out.println("Path:");
-                for (GraphNode<Station> node : path) {
-                    System.out.print(node.getValue().getName() + " -> ");
-                }
-                System.out.println("END");
-            }
         }
         if(selectedModeChoiceBox.getValue().equals("Select all routes")){
             multiplePathArrayList = graph.allPathsBetweenNodes(startNode, null, endNode);
+            drawLines(multiplePathArrayList.get(0));
         }
         else if(selectedModeChoiceBox.getValue().equals("Least nodes")){
             ArrayList<GraphNode<Station>> startPath = new ArrayList<>();
@@ -410,8 +402,13 @@ public class PrimaryController {
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
             drawLines(shortest);
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
-            drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
-        }
+            if(costPenaltyField.getText().isEmpty()){
+                drawLines(graph.shortestPathBetweenStations(startNode, endNode, 0, waypointStations, stationsToAvoid));
+
+            }
+            else{
+                drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
+            }}
         toGrayScale(true);
     }
 
@@ -428,6 +425,7 @@ public class PrimaryController {
     @FXML
     private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
         clearLines();
+        if(solutionPath == null || solutionPath.isEmpty()) return;
         for (int i = 0; i < solutionPath.size() - 1; i++) {
             GraphNode<Station> fromNode = solutionPath.get(i);
             GraphNode<Station> toNode = solutionPath.get(i + 1);
@@ -442,6 +440,7 @@ public class PrimaryController {
                 line.setStroke(Color.RED);
                 line.setStrokeWidth(5);
                 pane.getChildren().add(line);
+                line.setMouseTransparent(true);
             }
         }
     }
