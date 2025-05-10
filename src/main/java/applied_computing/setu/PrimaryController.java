@@ -424,12 +424,7 @@ public class PrimaryController {
             multiplePathArrayList = graph.allPathsBetweenNodes(startNode, null, endNode);
             drawLines(multiplePathArrayList.get(0));
         } else if (selectedModeChoiceBox.getValue().equals("Least nodes")) {
-            ArrayList<GraphNode<Station>> startPath = new ArrayList<>();
-            startPath.add(startNode);
-            Queue<ArrayList<GraphNode<Station>>> partialPaths = new LinkedList<>();
-            partialPaths.add(startPath);
-            ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
-            drawLines(shortest);
+            drawLines(graph.shortestPathByNodes(startNode, endNode));
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
             double laneChangePenalty = costPenaltyField.getText().isEmpty() ? 0 : Double.parseDouble(costPenaltyField.getText());
             drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, laneChangePenalty, waypointStations, stationsToAvoid));

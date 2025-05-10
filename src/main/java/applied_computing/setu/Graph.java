@@ -4,7 +4,17 @@ import java.util.*;
 
 public class Graph<T> {
 
-    // BFS
+
+    /* Interfacing method for BFS */
+    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination) {
+        ArrayList<GraphNode<T>> startPath = new ArrayList<>();
+        startPath.add(source);
+        Queue<ArrayList<GraphNode<T>>> partialPaths = new LinkedList<>();
+        partialPaths.add(startPath);
+        return shortestPathByNodes(partialPaths, null, destination);
+    }
+
+    /* BFS */
     public ArrayList<GraphNode<T>> shortestPathByNodes(Queue<ArrayList<GraphNode<T>>> partialPaths, ArrayList<GraphNode<T>> encountered, GraphNode<T> destination) {
         if (partialPaths.isEmpty()) return null;
         ArrayList<GraphNode<T>> currentPath = partialPaths.remove(); //Get first item (next path to consider) off agenda
@@ -21,7 +31,7 @@ public class Graph<T> {
         return shortestPathByNodes(partialPaths, encountered, destination);
     }
 
-    // DFS
+    /* DFS */
     public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source, ArrayList<GraphNode<T>> encountered ,GraphNode<T> destination) {
         ArrayList<ArrayList<GraphNode<T>>> result=null, temp2;
         if(source.getValue().equals(destination.getValue())) { //Found it
@@ -49,7 +59,7 @@ public class Graph<T> {
         return result;
     }
 
-    /* Interfacing method (order of waypoints matters) */
+    /* Interfacing method for Dijkstra's (order of waypoints matters) */
     public ArrayList<GraphNode<Station>> shortestPathBetweenStationsWithOrder(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, ArrayList<GraphNode<Station>> waypointStations, HashSet<GraphNode<Station>> stationsToAvoid) {
         ArrayList<GraphNode<Station>> route = new ArrayList<>();
         ArrayList<GraphNode<Station>> currentRoute;
