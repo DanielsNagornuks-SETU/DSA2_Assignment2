@@ -231,7 +231,6 @@ public class PrimaryController {
         } else if (event.getSource() == visitedStationsButton) {
             // Toggle visited stations selection
             if (isVisitedButtonSelected) {
-                findRoute();
                 // Stop selecting
                 isVisitedButtonSelected = false;
                 visitedStationsButton.setText("Start Selecting Visited Stations");
@@ -241,17 +240,21 @@ public class PrimaryController {
                 findRouteButton.setDisable(false);
                 visitedStationsButton.setDisable(false);
                 avoidingStationsButton.setDisable(false);
+                selectedModeChoiceBox.setDisable(false);
+                costPenaltyField.setDisable(false);
+                findRoute();
             } else {
                 // Start selecting
                 isVisitedButtonSelected = true;
                 isMultipleSelectionAllowed = true;
                 visitedStationsButton.setText("Stop Selecting");
                 avoidingStationsButton.setDisable(true); // Disable avoiding button while selecting
+                selectedModeChoiceBox.setDisable(true);
+                costPenaltyField.setDisable(true);
             }
         } else if (event.getSource() == avoidingStationsButton) {
             // Toggle avoiding stations selection
             if (isAvoidingButtonSelected) {
-                findRoute();
                 // Stop selecting
                 isAvoidingButtonSelected = false;
                 avoidingStationsButton.setText("Start Selecting Avoided Stations");
@@ -261,13 +264,17 @@ public class PrimaryController {
                 findRouteButton.setDisable(false);
                 visitedStationsButton.setDisable(false);
                 avoidingStationsButton.setDisable(false);
-
+                selectedModeChoiceBox.setDisable(false);
+                costPenaltyField.setDisable(false);
+                findRoute();
             } else {
                 // Start selecting
                 isAvoidingButtonSelected = true;
                 isMultipleSelectionAllowed = true;
                 avoidingStationsButton.setText("Stop Selecting");
                 visitedStationsButton.setDisable(true); // Disable visited button while selecting
+                selectedModeChoiceBox.setDisable(true);
+                costPenaltyField.setDisable(true);
             }
         }
     }
@@ -288,10 +295,15 @@ public class PrimaryController {
             targetVBox = stationsVBox; // Use stationsVBox if visitedStationsButton is pressed
             targetStations = waypointStations;
             selectedRadioButton.setStyle("-fx-mark-color: green;");
-        } else {
+        } else if (isAvoidingButtonSelected) {
             targetVBox = stationsAvoidVbox;
             targetStations = stationsToAvoid;
             selectedRadioButton.setStyle("-fx-mark-color: red;");
+        }
+        else{
+            selectedRadioButton.setStyle("-fx-mark-color: black");
+            targetStations = new HashSet<>();
+            targetVBox= new VBox();
         }
 
         // If multiple selection is allowed
@@ -315,10 +327,8 @@ public class PrimaryController {
             // If multiple selection is not allowed, update the start or end point label
             if (isStartPointSelected) {
                 startPointLabel.setText(formattedStationName);
-                selectedRadioButton.setSelected(false);
             } else {
                 endPointLabel.setText(formattedStationName);
-                selectedRadioButton.setSelected(false);
             }
 
             // Disable radio buttons when only one selection is allowed
@@ -330,8 +340,8 @@ public class PrimaryController {
             findRouteButton.setDisable(false);
             visitedStationsButton.setDisable(false);
             avoidingStationsButton.setDisable(false);
+            findRoute();
         }
-        findRoute();
     }
 
     // Utility method to check if the label is already in the VBox
@@ -409,6 +419,9 @@ public class PrimaryController {
             else{
                 drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
             }}
+        else{
+            selectedModeChoiceBox.setValue("Select all routes");
+        }
         toGrayScale(true);
     }
 
