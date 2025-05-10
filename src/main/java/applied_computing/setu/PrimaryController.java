@@ -247,6 +247,7 @@ public class PrimaryController {
                 avoidingStationsButton.setDisable(true); // Disable avoiding button while selecting
                 selectedModeChoiceBox.setDisable(true);
                 costPenaltyField.setDisable(true);
+                keepSomeButtonsDisabled(stationsAvoidVbox);
             }
         } else if (event.getSource() == avoidingStationsButton) {
             // Toggle avoiding stations selection
@@ -270,6 +271,7 @@ public class PrimaryController {
                 visitedStationsButton.setDisable(true); // Disable visited button while selecting
                 selectedModeChoiceBox.setDisable(true);
                 costPenaltyField.setDisable(true);
+                keepSomeButtonsDisabled(stationsVBox);
             }
         }
     }
@@ -348,6 +350,17 @@ public class PrimaryController {
             }
         }
         return false;
+    }
+
+    @FXML
+    private void keepSomeButtonsDisabled(VBox vbox) {
+        for (Node node : pane.getChildren()) {
+            if (!(node instanceof RadioButton)) continue;
+            RadioButton radioButton = (RadioButton) node;
+            if (isLabelInVBox(radioButton.getTooltip().getText().trim(),vbox)){
+                radioButton.setDisable(true);
+            }
+        }
     }
 
     @FXML
