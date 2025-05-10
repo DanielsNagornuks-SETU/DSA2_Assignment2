@@ -314,7 +314,6 @@ public class PrimaryController {
                 // Remove the label from the corresponding VBox if the RadioButton is deselected
                 removeLabelFromVBox(formattedStationName, targetVBox);
                 if (waypointsSelection) waypointStations.remove(stationNode); else stationsToAvoid.remove(stationNode);
-                findRoute();
             }
         } else {
             // If multiple selection is not allowed, update the start or end point label
