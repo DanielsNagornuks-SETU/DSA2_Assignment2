@@ -65,20 +65,20 @@ public class Graph<T> {
         ArrayList<GraphNode<Station>> currentRoute;
         ArrayList<GraphNode<Station>> waypoints = new ArrayList<>(waypointStations);
         while (!waypoints.isEmpty()) {
-            currentRoute = shortestPathToOneOfStationsWithOrder(source, waypoints.remove(0), laneChangePenalty, stationsToAvoid);
+            currentRoute = shortestPathBetweenStationsWithOrder(source, waypoints.remove(0), laneChangePenalty, stationsToAvoid);
             if (currentRoute == null) return null;
             source = currentRoute.remove(currentRoute.size() - 1);
             waypoints.remove(source);
             route.addAll(currentRoute);
         }
-        currentRoute = shortestPathToOneOfStationsWithOrder(source, destination, laneChangePenalty, stationsToAvoid);
+        currentRoute = shortestPathBetweenStationsWithOrder(source, destination, laneChangePenalty, stationsToAvoid);
         if (currentRoute == null) return null;
         route.addAll(currentRoute);
         return route;
     }
 
     /* Dijkstra's with order for waypoints */
-    public ArrayList<GraphNode<Station>> shortestPathToOneOfStationsWithOrder(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, HashSet<GraphNode<Station>> stationsToAvoid) {
+    public ArrayList<GraphNode<Station>> shortestPathBetweenStationsWithOrder(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, HashSet<GraphNode<Station>> stationsToAvoid) {
         source.setNodeValue(0);
         HashSet<GraphNode<Station>> considered = new HashSet<>(stationsToAvoid);
         PriorityQueue<GraphNode<Station>> agenda = new PriorityQueue<>();
