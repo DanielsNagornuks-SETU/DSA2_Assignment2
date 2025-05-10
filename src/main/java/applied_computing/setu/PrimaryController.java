@@ -27,8 +27,6 @@ public class PrimaryController {
     @FXML
     private Button endPointButton;
     @FXML
-    private Button findRouteButton;
-    @FXML
     private Button visitedStationsButton;
     @FXML
     private Button avoidingStationsButton;
@@ -216,7 +214,6 @@ public class PrimaryController {
         // Disable buttons as needed
         startPointButton.setDisable(true);
         endPointButton.setDisable(true);
-        findRouteButton.setDisable(true);
 
         // Enable radio buttons for station selection
         setAllRadioButtonsDisabled(false);
@@ -237,7 +234,6 @@ public class PrimaryController {
                 setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
                 endPointButton.setDisable(false);
-                findRouteButton.setDisable(false);
                 visitedStationsButton.setDisable(false);
                 avoidingStationsButton.setDisable(false);
                 selectedModeChoiceBox.setDisable(false);
@@ -261,7 +257,6 @@ public class PrimaryController {
                 setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
                 endPointButton.setDisable(false);
-                findRouteButton.setDisable(false);
                 visitedStationsButton.setDisable(false);
                 avoidingStationsButton.setDisable(false);
                 selectedModeChoiceBox.setDisable(false);
@@ -299,9 +294,13 @@ public class PrimaryController {
             targetVBox = stationsAvoidVbox;
             selectedRadioButton.setStyle("-fx-mark-color: red;");
         }
-        else{
-            selectedRadioButton.setStyle("-fx-mark-color: black");
+        else if(isStartPointSelected) {
+            selectedRadioButton.setStyle("-fx-mark-color: blue");
             targetVBox = new VBox();
+        }
+        else {
+            targetVBox = new VBox();
+            selectedRadioButton.setStyle("-fx-mark-color: orange;");
         }
 
         // If multiple selection is allowed
@@ -335,12 +334,41 @@ public class PrimaryController {
             // Re-enable buttons after one radio button is selected
             startPointButton.setDisable(false);
             endPointButton.setDisable(false);
-            findRouteButton.setDisable(false);
             visitedStationsButton.setDisable(false);
             avoidingStationsButton.setDisable(false);
             findRoute();
         }
+        deselectExcessiveButtons();
     }
+
+    private boolean isLabelInVBox(String text, VBox vbox) {
+        for (Node node : vbox.getChildren()) {
+            if (node instanceof Label && ((Label) node).getText().equalsIgnoreCase(text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @FXML
+    private void deselectExcessiveButtons() {
+        for (Node node : pane.getChildren()) {
+            if (!(node instanceof RadioButton)) continue;
+
+            RadioButton radioButton = (RadioButton) node;
+            String tooltipText = radioButton.getTooltip().getText();
+
+            boolean isStart = tooltipText.equalsIgnoreCase(startPointLabel.getText());
+            boolean isEnd = tooltipText.equalsIgnoreCase(endPointLabel.getText());
+            boolean isVisited = isLabelInVBox(tooltipText, stationsVBox);
+            boolean isAvoided = isLabelInVBox(tooltipText, stationsAvoidVbox);
+
+            if (!(isStart || isEnd || isVisited || isAvoided)) {
+                radioButton.setSelected(false);
+            }
+        }
+    }
+
 
     // Utility method to check if the label is already in the VBox
     private boolean isLabelInVBox(Label stationLabel, VBox targetVBox) {
