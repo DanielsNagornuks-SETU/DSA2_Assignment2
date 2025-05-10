@@ -48,7 +48,7 @@ public class PrimaryController {
     private TextField costPenaltyField;
     ArrayList<ArrayList<GraphNode<Station>>> multiplePathArrayList;
     private int pathCounter = 0;
-    private Graph graph = new Graph();
+    private final Graph<Station> graph = new Graph<>();
     private boolean isStartPointSelected = false;
     private boolean isMultipleSelectionAllowed = false;
     private boolean isVisitedButtonSelected = false;
@@ -56,8 +56,10 @@ public class PrimaryController {
     private ArrayList<Station> stationList;
     private HashMap<RadioButton, GraphNode<Station>> stationHashMap;
     Map<GraphNode<Station>, RadioButton> reverseMap = new HashMap<>();
-    private ArrayList<GraphNode<Station>> waypointStations = new ArrayList<>();
-    private HashSet<GraphNode<Station>> stationsToAvoid = new HashSet<>();
+    private final ArrayList<GraphNode<Station>> waypointStations = new ArrayList<>();
+    private final HashSet<GraphNode<Station>> stationsToAvoid = new HashSet<>();
+    private final Color[] colors = new Color[10];
+    private int colorIndex = 0;
 
     @FXML
     private void initialize() {
@@ -89,7 +91,7 @@ public class PrimaryController {
             }
         });
         costPenaltyField.setOnKeyReleased(event -> {findRoute();});
-
+        addColors();
     }
 
 
@@ -465,9 +467,11 @@ public class PrimaryController {
     private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
         clearLines();
         if(solutionPath == null || solutionPath.isEmpty()) return;
+        Color currentColor = getNextColor();
         for (int i = 0; i < solutionPath.size() - 1; i++) {
             GraphNode<Station> fromNode = solutionPath.get(i);
             GraphNode<Station> toNode = solutionPath.get(i + 1);
+            currentColor = waypointStations.contains(fromNode) ? getNextColor() : currentColor;
             RadioButton fromButton = reverseMap.get(fromNode);
             RadioButton toButton = reverseMap.get(toNode);
             if (fromButton != null && toButton != null) {
@@ -476,12 +480,14 @@ public class PrimaryController {
                 double endX = toButton.getLayoutX() + toButton.getWidth() / 2;
                 double endY = toButton.getLayoutY() + toButton.getHeight() / 2;
                 Line line = new Line(startX, startY, endX, endY);
-                line.setStroke(Color.RED);
+                line.setStroke(currentColor);
                 line.setStrokeWidth(5);
+                line.setOpacity(0.6);
                 pane.getChildren().add(line);
                 line.setMouseTransparent(true);
             }
         }
+        colorIndex = 0;
     }
 
     @FXML
@@ -497,6 +503,26 @@ public class PrimaryController {
             imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("U-Bahn_Wien.png"))));
         }
     }
+
+    private void addColors() {
+        colors[0] = Color.RED;
+        colors[1] = Color.GREEN;
+        colors[2] = Color.BLUE;
+        colors[3] = Color.ORANGE;
+        colors[4] = Color.MAGENTA;
+        colors[5] = Color.YELLOW;
+        colors[6] = Color.CYAN;
+        colors[7] = Color.PINK;
+        colors[8] = Color.OLIVE;
+        colors[9] = Color.PURPLE;
+    }
+
+    private Color getNextColor() {
+        Color color = colors[colorIndex];
+        colorIndex = (colorIndex + 1) % colors.length;
+        return color;
+    }
+
 
 
 }

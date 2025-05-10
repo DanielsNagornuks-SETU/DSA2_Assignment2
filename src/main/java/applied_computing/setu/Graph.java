@@ -4,20 +4,6 @@ import java.util.*;
 
 public class Graph<T> {
 
-    private ArrayList<GraphNode<T>> nodes = new ArrayList<>();
-
-    public void addNode(GraphNode<T> node) {
-        nodes.add(node);
-    }
-
-    public ArrayList<GraphNode<T>> getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(ArrayList<GraphNode<T>> nodes) {
-        this.nodes = nodes;
-    }
-
     // BFS
     public ArrayList<GraphNode<T>> shortestPathByNodes(Queue<ArrayList<GraphNode<T>>> partialPaths, ArrayList<GraphNode<T>> encountered, GraphNode<T> destination) {
         if (partialPaths.isEmpty()) return null;
