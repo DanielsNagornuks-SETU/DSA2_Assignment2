@@ -53,7 +53,7 @@ public class Graph<T> {
     public ArrayList<GraphNode<Station>> shortestPathBetweenStationsWithOrder(GraphNode<Station> source, GraphNode<Station> destination, double laneChangePenalty, ArrayList<GraphNode<Station>> waypointStations, HashSet<GraphNode<Station>> stationsToAvoid) {
         ArrayList<GraphNode<Station>> route = new ArrayList<>();
         ArrayList<GraphNode<Station>> currentRoute;
-        ArrayList<GraphNode<Station>>waypoints = new ArrayList<>(waypointStations);
+        ArrayList<GraphNode<Station>> waypoints = new ArrayList<>(waypointStations);
         while (!waypoints.isEmpty()) {
             currentRoute = shortestPathToOneOfStationsWithOrder(source, waypoints.remove(0), laneChangePenalty, stationsToAvoid);
             if (currentRoute == null) return null;
@@ -109,6 +109,10 @@ public class Graph<T> {
                 }
             }
         } while (!agenda.isEmpty());
+        for (GraphNode<Station> adjNode : considered) {
+            adjNode.setNodeValue(Double.MAX_VALUE);
+            adjNode.setReturnNode(null);
+        }
         return null;
     }
 

@@ -453,7 +453,7 @@ public class PrimaryController {
     @FXML
     private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
         clearLines();
-        if(solutionPath == null || solutionPath.isEmpty()) return;
+        if (solutionPath == null || solutionPath.isEmpty()) return;
         Color currentColor = getNextColor();
         for (int i = 0; i < solutionPath.size() - 1; i++) {
             GraphNode<Station> fromNode = solutionPath.get(i);
