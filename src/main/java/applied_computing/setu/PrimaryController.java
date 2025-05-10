@@ -213,9 +213,11 @@ public class PrimaryController {
         if (event.getSource() == startPointButton) {
             isStartPointSelected = true;
             isMultipleSelectionAllowed = false; // Allow only one selection
+            keepSomeButtonsDisabled(stationsAvoidVbox);
         } else if (event.getSource() == endPointButton) {
             isStartPointSelected = false;
             isMultipleSelectionAllowed = false; // Allow only one selection
+            keepSomeButtonsDisabled(stationsAvoidVbox);
         } else if (event.getSource() == visitedStationsButton) {
             // Toggle visited stations selection
             if (isVisitedButtonSelected) {
@@ -312,6 +314,7 @@ public class PrimaryController {
                 // Remove the label from the corresponding VBox if the RadioButton is deselected
                 removeLabelFromVBox(formattedStationName, targetVBox);
                 if (waypointsSelection) waypointStations.remove(stationNode); else stationsToAvoid.remove(stationNode);
+                findRoute();
             }
         } else {
             // If multiple selection is not allowed, update the start or end point label
@@ -348,7 +351,9 @@ public class PrimaryController {
         for (Node node : pane.getChildren()) {
             if (!(node instanceof RadioButton)) continue;
             RadioButton radioButton = (RadioButton) node;
-            if (isLabelInVBox(radioButton.getTooltip().getText().trim(),vbox)) radioButton.setDisable(true);
+            if (isLabelInVBox(radioButton.getTooltip().getText().trim(),vbox) ||
+                    ((RadioButton) node).getTooltip().getText().equals(startPointLabel.getText()) ||
+                    ((RadioButton) node).getTooltip().getText().equals(endPointLabel.getText())) radioButton.setDisable(true);
         }
     }
 
@@ -484,14 +489,14 @@ public class PrimaryController {
 
     private void addColors() {
         colors[0] = Color.RED;
-        colors[1] = Color.GREEN;
+        colors[1] = Color.AQUA;
         colors[2] = Color.BLUE;
         colors[3] = Color.ORANGE;
         colors[4] = Color.MAGENTA;
         colors[5] = Color.YELLOW;
         colors[6] = Color.CYAN;
         colors[7] = Color.PINK;
-        colors[8] = Color.OLIVE;
+        colors[8] = Color.LIGHTGREEN;
         colors[9] = Color.PURPLE;
     }
 
