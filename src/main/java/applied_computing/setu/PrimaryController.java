@@ -18,46 +18,44 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
 public class PrimaryController {
+
     @FXML
-    private Pane pane; // The main Pane containing everything
+    private Pane pane;
+
     @FXML
-    private Button startPointButton;
+    private Button startPointButton, endPointButton, visitedStationsButton, avoidingStationsButton, routeCycleButton;
+
     @FXML
-    private Button endPointButton;
+    private Label startPointLabel, endPointLabel;
+
     @FXML
-    private Button visitedStationsButton;
-    @FXML
-    private Button avoidingStationsButton;
-    @FXML
-    private Label startPointLabel;
-    @FXML
-    private Label endPointLabel;
-    @FXML
-    private VBox stationsVBox;
-    @FXML
-    private VBox stationsAvoidVbox;
+    private VBox stationsVBox, stationsAvoidVbox;
+
     @FXML
     private ImageView imageView;
+
     @FXML
     private ChoiceBox<String> selectedModeChoiceBox;
-    @FXML
-    private Button routeCycleButton;
+
     @FXML
     private TextField costPenaltyField;
+
     ArrayList<ArrayList<GraphNode<Station>>> multiplePathArrayList;
     private int pathCounter = 0;
     private final Graph<Station> graph = new Graph<>();
+
     private boolean isStartPointSelected = false;
     private boolean isMultipleSelectionAllowed = false;
     private boolean isVisitedButtonSelected = false;
     private boolean isAvoidingButtonSelected = false;
+
     private ArrayList<Station> stationList;
     private HashMap<RadioButton, GraphNode<Station>> stationHashMap;
     Map<GraphNode<Station>, RadioButton> reverseMap = new HashMap<>();
     private final ArrayList<GraphNode<Station>> waypointStations = new ArrayList<>();
     private final HashSet<GraphNode<Station>> stationsToAvoid = new HashSet<>();
+
     private final Color[] colors = new Color[10];
     private int colorIndex = 0;
 
@@ -78,13 +76,11 @@ public class PrimaryController {
                 routeCycleButton.setVisible(true);
                 costPenaltyField.setVisible(false);
                 findRoute();
-            }
-            else if(newValue.equals("Shortest route")) {
+            } else if (newValue.equals("Shortest route")) {
                 costPenaltyField.setVisible(true);
                 routeCycleButton.setVisible(false);
                 findRoute();
-            }
-            else{
+            } else {
                 costPenaltyField.setVisible(false);
                 routeCycleButton.setVisible(false);
                 findRoute();
@@ -94,17 +90,12 @@ public class PrimaryController {
         addColors();
     }
 
-
     @FXML
     private RadioButton[] getAllRadioButtons() {
         List<RadioButton> radioButtons = new ArrayList<>();
-
         for (Node node : pane.getChildren()) {
-            if (node instanceof RadioButton) {
-                radioButtons.add((RadioButton) node);
-            }
+            if (node instanceof RadioButton) radioButtons.add((RadioButton) node);
         }
-
         return radioButtons.toArray(new RadioButton[0]);
     }
 
@@ -120,9 +111,7 @@ public class PrimaryController {
         HashMap<GraphNode<Station>, Double> adjacencyList = new HashMap<>();
 
         Station currentStation = node.getValue();
-        if (currentStation == null) {
-            return adjacencyList;
-        }
+        if (currentStation == null) return adjacencyList;
 
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/applied_computing/setu/adjacencies.csv"))) {
             String line;
@@ -359,9 +348,7 @@ public class PrimaryController {
         for (Node node : pane.getChildren()) {
             if (!(node instanceof RadioButton)) continue;
             RadioButton radioButton = (RadioButton) node;
-            if (isLabelInVBox(radioButton.getTooltip().getText().trim(),vbox)){
-                radioButton.setDisable(true);
-            }
+            if (isLabelInVBox(radioButton.getTooltip().getText().trim(),vbox)) radioButton.setDisable(true);
         }
     }
 
@@ -390,9 +377,7 @@ public class PrimaryController {
         for (javafx.scene.Node node : targetVBox.getChildren()) {
             if (node instanceof Label) {
                 Label label = (Label) node;
-                if (label.getText().equals(stationLabel.getText())) {
-                    return true;
-                }
+                if (label.getText().equals(stationLabel.getText())) return true;
             }
         }
         return false;
@@ -421,46 +406,30 @@ public class PrimaryController {
 
         for (RadioButton rb : getAllRadioButtons()) {
             String stationName = rb.getTooltip().getText(); // Normalize name
-
-            if (stationName.equalsIgnoreCase(startName)) {
-                startButton = rb;
-            }
-            if (stationName.equalsIgnoreCase(endName)) {
-                endButton = rb;
-            }
+            if (stationName.equalsIgnoreCase(startName)) startButton = rb;
+            if (stationName.equalsIgnoreCase(endName)) endButton = rb;
         }
 
-        if (startButton == null || endButton == null) {
-            return;
-        }
+        if (startButton == null || endButton == null) return;
 
         GraphNode<Station> startNode = stationHashMap.get(startButton);
         GraphNode<Station> endNode = stationHashMap.get(endButton);
 
-        if (startNode == null || endNode == null) {
-            return;
-        }
-        if(selectedModeChoiceBox.getValue().equals("Select all routes")){
+        if (startNode == null || endNode == null) return;
+        if (selectedModeChoiceBox.getValue().equals("Select all routes")) {
             multiplePathArrayList = graph.allPathsBetweenNodes(startNode, null, endNode);
             drawLines(multiplePathArrayList.get(0));
-        }
-        else if(selectedModeChoiceBox.getValue().equals("Least nodes")){
+        } else if (selectedModeChoiceBox.getValue().equals("Least nodes")) {
             ArrayList<GraphNode<Station>> startPath = new ArrayList<>();
             startPath.add(startNode);
             Queue<ArrayList<GraphNode<Station>>> partialPaths = new LinkedList<>();
             partialPaths.add(startPath);
-
             ArrayList<GraphNode<Station>> shortest = graph.shortestPathByNodes(partialPaths, null, endNode);
             drawLines(shortest);
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
-            if(costPenaltyField.getText().isEmpty()){
-                drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, 0, waypointStations, stationsToAvoid));
-
-            }
-            else{
-                drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
-            }}
-        else{
+            double laneChangePenalty = costPenaltyField.getText().isEmpty() ? 0 : Double.parseDouble(costPenaltyField.getText());
+            drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, laneChangePenalty, waypointStations, stationsToAvoid));
+        } else {
             selectedModeChoiceBox.setValue("Select all routes");
         }
         toGrayScale(true);
@@ -509,12 +478,8 @@ public class PrimaryController {
     }
 
     private void toGrayScale(boolean state) {
-        if(state) {
-            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("grayImage.png"))));
-        }
-        else{
-            imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("U-Bahn_Wien.png"))));
-        }
+        String imageFileName = state ? "grayImage.png" : "U-Bahn_Wien.png";
+        imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageFileName))));
     }
 
     private void addColors() {
@@ -535,7 +500,5 @@ public class PrimaryController {
         colorIndex = (colorIndex + 1) % colors.length;
         return color;
     }
-
-
 
 }
