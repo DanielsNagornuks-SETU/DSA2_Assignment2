@@ -58,7 +58,7 @@ public class PrimaryController {
     private ArrayList<Station> stationList;
     private HashMap<RadioButton, GraphNode<Station>> stationHashMap;
     Map<GraphNode<Station>, RadioButton> reverseMap = new HashMap<>();
-    private HashSet<GraphNode<Station>> waypointStations = new HashSet<>();
+    private ArrayList<GraphNode<Station>> waypointStations = new ArrayList<>();
     private HashSet<GraphNode<Station>> stationsToAvoid = new HashSet<>();
 
     @FXML
@@ -289,21 +289,19 @@ public class PrimaryController {
         String formattedStationName = selectedRadioButton.getTooltip().getText().trim();
 
         VBox targetVBox;
-        HashSet<GraphNode<Station>> targetStations;
+        boolean waypointsSelection = false;
         // Check the source of the event and determine the corresponding VBox
         if (isVisitedButtonSelected) {
             targetVBox = stationsVBox; // Use stationsVBox if visitedStationsButton is pressed
-            targetStations = waypointStations;
+            waypointsSelection = true;
             selectedRadioButton.setStyle("-fx-mark-color: green;");
         } else if (isAvoidingButtonSelected) {
             targetVBox = stationsAvoidVbox;
-            targetStations = stationsToAvoid;
             selectedRadioButton.setStyle("-fx-mark-color: red;");
         }
         else{
             selectedRadioButton.setStyle("-fx-mark-color: black");
-            targetStations = new HashSet<>();
-            targetVBox= new VBox();
+            targetVBox = new VBox();
         }
 
         // If multiple selection is allowed
@@ -316,12 +314,12 @@ public class PrimaryController {
                 // Add the label to the corresponding VBox (if not already added)
                 if (!isLabelInVBox(stationLabel, targetVBox)) {
                     targetVBox.getChildren().add(stationLabel);
-                    targetStations.add(stationNode);
+                    if (waypointsSelection) waypointStations.add(stationNode); else stationsToAvoid.add(stationNode);
                 }
             } else {
                 // Remove the label from the corresponding VBox if the RadioButton is deselected
                 removeLabelFromVBox(formattedStationName, targetVBox);
-                targetStations.remove(stationNode);
+                if (waypointsSelection) waypointStations.remove(stationNode); else stationsToAvoid.remove(stationNode);
             }
         } else {
             // If multiple selection is not allowed, update the start or end point label
@@ -413,11 +411,11 @@ public class PrimaryController {
             drawLines(shortest);
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
             if(costPenaltyField.getText().isEmpty()){
-                drawLines(graph.shortestPathBetweenStations(startNode, endNode, 0, waypointStations, stationsToAvoid));
+                drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, 0, waypointStations, stationsToAvoid));
 
             }
             else{
-                drawLines(graph.shortestPathBetweenStations(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
+                drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, Double.parseDouble(costPenaltyField.getText()), waypointStations, stationsToAvoid));
             }}
         else{
             selectedModeChoiceBox.setValue("Select all routes");
