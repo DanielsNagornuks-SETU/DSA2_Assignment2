@@ -151,8 +151,7 @@ public class PrimaryController {
                 return node;
             }
         }
-
-        return null; // if no match found
+        return null;
     }
 
 
@@ -426,11 +425,9 @@ public class PrimaryController {
             drawLines(multiplePathArrayList.get(0));
         } else if (selectedModeChoiceBox.getValue().equals("Route with least stops")) {
             drawLines(graph.shortestPathByNodes(startNode, endNode,waypointStations, stationsToAvoid));
-        } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
+        } else {
             double laneChangePenalty = costPenaltyField.getText().isEmpty() ? 0 : Double.parseDouble(costPenaltyField.getText());
             drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, laneChangePenalty, waypointStations, stationsToAvoid));
-        } else {
-            selectedModeChoiceBox.setValue("All routes");
         }
         toGrayScale(true);
     }
