@@ -422,7 +422,7 @@ public class PrimaryController {
 
         if (startNode == null || endNode == null) return;
         if (selectedModeChoiceBox.getValue().equals("All routes")) {
-            multiplePathArrayList = graph.allPathsBetweenNodes(startNode, null, endNode);
+            multiplePathArrayList = graph.allPathsBetweenNodes(startNode, endNode, waypointStations, stationsToAvoid);
             drawLines(multiplePathArrayList.get(0));
         } else if (selectedModeChoiceBox.getValue().equals("Route with least stops")) {
             drawLines(graph.shortestPathByNodes(startNode, endNode));

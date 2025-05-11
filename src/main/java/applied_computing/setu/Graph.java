@@ -31,25 +31,39 @@ public class Graph<T> {
         return shortestPathByNodes(partialPaths, encountered, destination);
     }
 
-    public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source , GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid){
-        ArrayList<ArrayList<GraphNode<T>>> fullPaths = new ArrayList<>();
+    public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source, GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid){
+        ArrayList<ArrayList<GraphNode<T>>> routes = new ArrayList<>();
         ArrayList<GraphNode<T>> waypoints = new ArrayList<>(waypointStations);
         while (!waypoints.isEmpty()) {
             GraphNode<T> currentDestination = waypoints.remove(0);
             ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, currentDestination, stationsToAvoid);
             if (pathSection == null) return null;
             source = currentDestination;
-//            waypoints.remove(source); // Not sure if this is needed for dfs
-            fullPaths.addAll(pathSection);
+            routes = joinRoutes(routes, pathSection);
         }
-        ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, destination, stationsToAvoid);
+        ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, destination, stationsToAvoid); /* returns null if waypoint is selected */
         if (pathSection == null) return null;
-        fullPaths.addAll(pathSection);
-        return fullPaths;
+        routes = joinRoutes(routes, pathSection);
+        return routes;
+    }
+
+    private ArrayList<ArrayList<GraphNode<T>>> joinRoutes(ArrayList<ArrayList<GraphNode<T>>> routes1, ArrayList<ArrayList<GraphNode<T>>> routes2) {
+        if (routes1.isEmpty()) return routes2;
+        ArrayList<ArrayList<GraphNode<T>>> newRoutes = new ArrayList<>();
+        for (ArrayList<GraphNode<T>> route1 : routes1) {
+            for (ArrayList<GraphNode<T>> route2 : routes2) {
+                ArrayList<GraphNode<T>> newRoute = new ArrayList<>();
+                newRoute.addAll(route1);
+                newRoute.addAll(route2);
+                newRoute.remove(route1.size() - 1);
+                newRoutes.add(newRoute);
+            }
+        }
+        return newRoutes;
     }
 
     /* DFS */
-    public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source, ArrayList<GraphNode<T>> encountered ,GraphNode<T> destination, HashSet<GraphNode<T>> stationsToAvoid) {
+    public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source, ArrayList<GraphNode<T>> encountered, GraphNode<T> destination, HashSet<GraphNode<T>> stationsToAvoid) {
         ArrayList<ArrayList<GraphNode<T>>> result=null, temp2;
         if(source.getValue().equals(destination.getValue())) { //Found it
             ArrayList<GraphNode<T>> temp=new ArrayList<>(); //Create new single solution path list
@@ -87,7 +101,6 @@ public class Graph<T> {
             currentRoute = shortestPathBetweenStationsWithOrder(source, waypoints.remove(0), laneChangePenalty, stationsToAvoid);
             if (currentRoute == null) return null;
             source = currentRoute.remove(currentRoute.size() - 1);
-            waypoints.remove(source);
             route.addAll(currentRoute);
         }
         currentRoute = shortestPathBetweenStationsWithOrder(source, destination, laneChangePenalty, stationsToAvoid);
