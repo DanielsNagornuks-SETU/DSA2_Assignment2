@@ -438,11 +438,8 @@ public class PrimaryController {
     @FXML
     private void cycleMultiplePaths() {
         if (multiplePathArrayList == null || multiplePathArrayList.isEmpty()) return;
-        drawLines(multiplePathArrayList.get(pathCounter));
-        pathCounter++;
-        if (pathCounter >= multiplePathArrayList.size()) {
-            pathCounter = 0;
-        }
+        pathCounter = pathCounter % multiplePathArrayList.size();
+        drawLines(multiplePathArrayList.get(pathCounter++));
     }
 
     @FXML
