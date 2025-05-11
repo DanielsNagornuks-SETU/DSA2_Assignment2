@@ -5,23 +5,32 @@ import java.util.*;
 public class Graph<T> {
 
 
-    /* Interfacing method for BFS */
-    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid) {
+    /* Interfacing method for BFS for Graph class*/
+    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination, HashSet<GraphNode<T>> stationsToAvoid) {
         ArrayList<GraphNode<T>> startPath = new ArrayList<>();
-        ArrayList<GraphNode<T>> waypoints = new ArrayList<>(waypointStations);
-        while (!waypoints.isEmpty()) {
-            GraphNode<T> currentDestination = waypoints.remove(0);
-            startPath.add(source);
-            Queue<ArrayList<GraphNode<T>>> partialPaths = new LinkedList<>();
-            partialPaths.add(new ArrayList<>());
-            startPath = shortestPathByNodes(partialPaths, null, currentDestination, stationsToAvoid);
-            if(startPath==null) return null;
-            source = startPath.remove(startPath.size() - 1);
-        }
         startPath.add(source);
         Queue<ArrayList<GraphNode<T>>> partialPaths = new LinkedList<>();
         partialPaths.add(startPath);
-        return shortestPathByNodes(partialPaths, null, destination, stationsToAvoid);
+        ArrayList<GraphNode<T>> resultPath = shortestPathByNodes(partialPaths, null, destination, stationsToAvoid);
+        Collections.reverse(resultPath);
+        return resultPath;
+    }
+
+    /* Interfacing method for BFS for Controller class */
+    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid) {
+        ArrayList<GraphNode<T>> route = new ArrayList<>();
+        ArrayList<GraphNode<T>> currentRoute;
+        ArrayList<GraphNode<T>> waypoints = new ArrayList<>(waypointStations);
+        while (!waypoints.isEmpty()) {
+            currentRoute = shortestPathByNodes(source, waypoints.remove(0), stationsToAvoid);
+            if (currentRoute == null) return null;
+            source = currentRoute.remove(currentRoute.size() - 1);
+            route.addAll(currentRoute);
+        }
+        currentRoute = shortestPathByNodes(source, destination, stationsToAvoid);
+        if (currentRoute == null) return null;
+        route.addAll(currentRoute);
+        return route;
     }
 
     /* BFS */
@@ -34,7 +43,7 @@ public class Graph<T> {
         encountered.add(currentNode); //Record current node as encountered so it isn't revisited again
         for (GraphNode<T> adjNode : currentNode.getAdjacencyList().keySet()) //For each adjacent node
             if (!encountered.contains(adjNode)) { //If it hasn't already been encountered
-                if(stationsToAvoid.contains(adjNode)) {
+                if(!stationsToAvoid.contains(adjNode)) {
                     ArrayList<GraphNode<T>> newPath = new ArrayList<>(currentPath); //Create a new path list as a copy of the current/next path
                     newPath.add(0, adjNode); //And add the adjacent node to the front of the new copy
                     partialPaths.add(newPath); //Add the new path to the end of agenda (end->BFS!)
