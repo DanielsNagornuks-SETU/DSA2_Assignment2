@@ -72,7 +72,7 @@ public class PrimaryController {
         costPenaltyField.setVisible(false);
         routeCycleButton.setVisible(false);
         selectedModeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals("Select all routes")) {
+            if(newValue.equals("All routes")) {
                 routeCycleButton.setVisible(true);
                 costPenaltyField.setVisible(false);
                 findRoute();
@@ -86,6 +86,7 @@ public class PrimaryController {
                 findRoute();
             }
         });
+        selectedModeChoiceBox.setValue("Shortest route");
         costPenaltyField.setOnKeyReleased(event -> {findRoute();});
         addColors();
     }
@@ -223,7 +224,7 @@ public class PrimaryController {
             if (isVisitedButtonSelected) {
                 // Stop selecting
                 isVisitedButtonSelected = false;
-                visitedStationsButton.setText("Start Selecting Visited Stations");
+                visitedStationsButton.setText("Start Selecting Waypoint Stations");
                 setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
                 endPointButton.setDisable(false);
@@ -247,7 +248,7 @@ public class PrimaryController {
             if (isAvoidingButtonSelected) {
                 // Stop selecting
                 isAvoidingButtonSelected = false;
-                avoidingStationsButton.setText("Start Selecting Avoided Stations");
+                avoidingStationsButton.setText("Start Selecting Stations To Avoid");
                 setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
                 endPointButton.setDisable(false);
@@ -420,16 +421,16 @@ public class PrimaryController {
         GraphNode<Station> endNode = stationHashMap.get(endButton);
 
         if (startNode == null || endNode == null) return;
-        if (selectedModeChoiceBox.getValue().equals("Select all routes")) {
+        if (selectedModeChoiceBox.getValue().equals("All routes")) {
             multiplePathArrayList = graph.allPathsBetweenNodes(startNode, null, endNode);
             drawLines(multiplePathArrayList.get(0));
-        } else if (selectedModeChoiceBox.getValue().equals("Least nodes")) {
+        } else if (selectedModeChoiceBox.getValue().equals("Route with least stops")) {
             drawLines(graph.shortestPathByNodes(startNode, endNode));
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
             double laneChangePenalty = costPenaltyField.getText().isEmpty() ? 0 : Double.parseDouble(costPenaltyField.getText());
             drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, laneChangePenalty, waypointStations, stationsToAvoid));
         } else {
-            selectedModeChoiceBox.setValue("Select all routes");
+            selectedModeChoiceBox.setValue("All routes");
         }
         toGrayScale(true);
     }

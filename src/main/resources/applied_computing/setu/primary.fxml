@@ -20,8 +20,8 @@
             <ChoiceBox fx:id="selectedModeChoiceBox" prefWidth="150.0" value="Travel mode">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Select all routes" />
-                     <String fx:value="Least nodes" />
+                     <String fx:value="All routes" />
+                     <String fx:value="Route with least stops" />
                      <String fx:value="Shortest route" />
                   </FXCollections>
                </items>
@@ -470,13 +470,13 @@
                   <VBox fx:id="stationsVBox" prefHeight="200.0" prefWidth="180.0" />
                </content>
             </ScrollPane>
-            <Button fx:id="visitedStationsButton" mnemonicParsing="false" onAction="#selectingOneStation" text="Select stations to be visited" />
+            <Button fx:id="visitedStationsButton" mnemonicParsing="false" onAction="#selectingOneStation" text="Select Waypoint Stations" />
             <ScrollPane layoutX="474.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
                <content>
                   <VBox fx:id="stationsAvoidVbox" prefHeight="200.0" prefWidth="180.0" />
                </content>
             </ScrollPane>
-            <Button fx:id="avoidingStationsButton" layoutX="638.0" layoutY="10.0" mnemonicParsing="false" onAction="#selectingOneStation" text="Select stations to be avoided" />
+            <Button fx:id="avoidingStationsButton" layoutX="638.0" layoutY="10.0" mnemonicParsing="false" onAction="#selectingOneStation" text="Select Stations To Avoid" />
          </children>
          <VBox.margin>
             <Insets top="10.0" />
