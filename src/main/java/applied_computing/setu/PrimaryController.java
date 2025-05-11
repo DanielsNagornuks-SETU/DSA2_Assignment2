@@ -425,7 +425,7 @@ public class PrimaryController {
             multiplePathArrayList = graph.allPathsBetweenNodes(startNode, endNode, waypointStations, stationsToAvoid);
             drawLines(multiplePathArrayList.get(0));
         } else if (selectedModeChoiceBox.getValue().equals("Route with least stops")) {
-            drawLines(graph.shortestPathByNodes(startNode, endNode));
+            drawLines(graph.shortestPathByNodes(startNode, endNode,waypointStations, stationsToAvoid));
         } else if (selectedModeChoiceBox.getValue().equals("Shortest route")) {
             double laneChangePenalty = costPenaltyField.getText().isEmpty() ? 0 : Double.parseDouble(costPenaltyField.getText());
             drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, laneChangePenalty, waypointStations, stationsToAvoid));

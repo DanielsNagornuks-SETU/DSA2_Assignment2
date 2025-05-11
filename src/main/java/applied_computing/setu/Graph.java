@@ -6,7 +6,7 @@ public class Graph<T> {
 
 
     /* Interfacing method for BFS */
-    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination) {
+    public ArrayList<GraphNode<T>> shortestPathByNodes(GraphNode<T> source, GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid) {
         ArrayList<GraphNode<T>> startPath = new ArrayList<>();
         startPath.add(source);
         Queue<ArrayList<GraphNode<T>>> partialPaths = new LinkedList<>();
@@ -38,7 +38,8 @@ public class Graph<T> {
             GraphNode<T> currentDestination = waypoints.remove(0);
             ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, currentDestination, stationsToAvoid);
             if (pathSection == null) return null;
-            source = currentDestination;
+            ArrayList<GraphNode<T>> temp = pathSection.get(pathSection.size()-1);
+            source = temp.get(temp.size()-1);
             routes = joinRoutes(routes, pathSection);
         }
         ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, destination, stationsToAvoid); /* returns null if waypoint is selected */
