@@ -438,19 +438,20 @@ public class PrimaryController {
     @FXML
     private void cycleMultiplePaths() {
         if (multiplePathArrayList == null || multiplePathArrayList.isEmpty()) return;
-        pathCounter = pathCounter % multiplePathArrayList.size();
-        drawLines(multiplePathArrayList.get(pathCounter++));
+        pathCounter = (pathCounter + 1) % multiplePathArrayList.size();
+        drawLines(multiplePathArrayList.get(pathCounter));
     }
 
     @FXML
     private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
         clearLines();
+        HashSet<GraphNode<Station>> waypoints = new HashSet<>(waypointStations);
         if (solutionPath == null || solutionPath.isEmpty()) return;
         Color currentColor = getNextColor();
         for (int i = 0; i < solutionPath.size() - 1; i++) {
             GraphNode<Station> fromNode = solutionPath.get(i);
             GraphNode<Station> toNode = solutionPath.get(i + 1);
-            currentColor = waypointStations.contains(fromNode) ? getNextColor() : currentColor;
+            currentColor = waypoints.remove(fromNode) ? getNextColor() : currentColor;
             RadioButton fromButton = reverseMap.get(fromNode);
             RadioButton toButton = reverseMap.get(toNode);
             if (fromButton != null && toButton != null) {
