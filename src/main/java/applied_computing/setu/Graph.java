@@ -31,8 +31,8 @@ public class Graph<T> {
         return shortestPathByNodes(partialPaths, encountered, destination);
     }
 
-    public ArrayList<ArrayList<ArrayList<GraphNode<T>>>> allPathsBetweenNodes(GraphNode<T> source , GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid){
-        ArrayList<ArrayList<ArrayList<GraphNode<T>>>> fullPaths = new ArrayList<>();
+    public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source , GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid){
+        ArrayList<ArrayList<GraphNode<T>>> fullPaths = new ArrayList<>();
         ArrayList<GraphNode<T>> waypoints = new ArrayList<>(waypointStations);
         while (!waypoints.isEmpty()) {
             GraphNode<T> currentDestination = waypoints.remove(0);
@@ -40,11 +40,11 @@ public class Graph<T> {
             if (pathSection == null) return null;
             source = currentDestination;
 //            waypoints.remove(source); // Not sure if this is needed for dfs
-            fullPaths.add(pathSection);
+            fullPaths.addAll(pathSection);
         }
         ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, destination, stationsToAvoid);
         if (pathSection == null) return null;
-        fullPaths.add(pathSection);
+        fullPaths.addAll(pathSection);
         return fullPaths;
     }
 
