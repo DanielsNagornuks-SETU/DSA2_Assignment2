@@ -43,6 +43,7 @@ public class Graph<T> {
         return shortestPathByNodes(partialPaths, encountered, destination, stationsToAvoid);
     }
 
+    /* Interfacing method for DFS */
     public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source, GraphNode<T> destination, ArrayList<GraphNode<T>> waypointStations, HashSet<GraphNode<T>> stationsToAvoid){
         ArrayList<ArrayList<GraphNode<T>>> routes = new ArrayList<>();
         ArrayList<GraphNode<T>> waypoints = new ArrayList<>(waypointStations);
@@ -50,11 +51,11 @@ public class Graph<T> {
             GraphNode<T> currentDestination = waypoints.remove(0);
             ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, currentDestination, stationsToAvoid);
             if (pathSection == null) return null;
-            ArrayList<GraphNode<T>> temp = pathSection.get(pathSection.size()-1);
-            source = temp.get(temp.size()-1);
+            ArrayList<GraphNode<T>> tempPath = pathSection.get(0); // Need any one of paths to get the last node
+            source = tempPath.get(tempPath.size() - 1);
             routes = joinRoutes(routes, pathSection);
         }
-        ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, destination, stationsToAvoid); /* returns null if waypoint is selected */
+        ArrayList<ArrayList<GraphNode<T>>> pathSection = allPathsBetweenNodes(source, null, destination, stationsToAvoid);
         if (pathSection == null) return null;
         routes = joinRoutes(routes, pathSection);
         return routes;
@@ -77,28 +78,24 @@ public class Graph<T> {
 
     /* DFS */
     public ArrayList<ArrayList<GraphNode<T>>> allPathsBetweenNodes(GraphNode<T> source, ArrayList<GraphNode<T>> encountered, GraphNode<T> destination, HashSet<GraphNode<T>> stationsToAvoid) {
-        ArrayList<ArrayList<GraphNode<T>>> result=null, temp2;
-        if(source.getValue().equals(destination.getValue())) { //Found it
-            ArrayList<GraphNode<T>> temp=new ArrayList<>(); //Create new single solution path list
-            temp.add(source); //Add current node to the new single path list
-            result=new ArrayList<>(); //Create new "list of lists" to store path permutations
-            result.add(temp); //Add the new single path list to the path permutations list
-            return result; //Return the path permutations list
+        ArrayList<ArrayList<GraphNode<T>>> result = null, pathsBetweenNodes;
+        if (source.getValue().equals(destination.getValue())) {
+            ArrayList<GraphNode<T>> newSolutionPath = new ArrayList<>();
+            newSolutionPath.add(source);
+            result = new ArrayList<>();
+            result.add(newSolutionPath);
+            return result;
         }
-        if(encountered==null) encountered=new ArrayList<>(); //First node so create new (empty) encountered list
-        encountered.add(source); //Add current node to encountered list
+        if (encountered == null) encountered = new ArrayList<>();
+        encountered.add(source);
         for(GraphNode<T> adjNode : source.getAdjacencyList().keySet()){
-            if(!encountered.contains(adjNode)) {
-                if(!stationsToAvoid.contains(adjNode)) {
-                    temp2 = allPathsBetweenNodes(adjNode, new ArrayList<>(encountered), destination, stationsToAvoid); //Use clone of encountered list
-                    // for recursive call!
-                    if (temp2 != null) { //Result of the recursive call contains one or more paths to the solution node
-                        for (ArrayList<GraphNode<T>> x : temp2) //For each partial path list returned
-                            x.add(0, source); //Add the current node to the front of each path list
-                        if (result == null)
-                            result = temp2; //If this is the first set of solution paths found use it as the result
-                        else result.addAll(temp2); //Otherwise append them to the previously found paths
-                    }
+            if (!encountered.contains(adjNode) && !stationsToAvoid.contains(adjNode)) {
+                pathsBetweenNodes = allPathsBetweenNodes(adjNode, new ArrayList<>(encountered), destination, stationsToAvoid);
+                if (pathsBetweenNodes != null) {
+                    for (ArrayList<GraphNode<T>> path : pathsBetweenNodes)
+                        path.add(0, source);
+                    if (result == null) result = pathsBetweenNodes;
+                    else result.addAll(pathsBetweenNodes);
                 }
             }
         }
