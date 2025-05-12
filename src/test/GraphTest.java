@@ -27,8 +27,8 @@ public class GraphTest {
         B.connectNode(C, 1);
         C.connectNode(D, 1);
         D.connectNode(E, 1);
-        B.connectNode(D, 2);
-        A.connectNode(C, 4);
+        B.connectNode(D, 4);
+        A.connectNode(C, 2);
 
         waypoints = new ArrayList<>();
         waypoints.add(E);
@@ -75,32 +75,20 @@ public class GraphTest {
         assertEquals(4, result.size());
     }
 
-    //Intermediate
-
-    //Causing Errors
-//    @Test
-//    public void testShortestPathByWeight_Dijkstra_LaneChangePenalty(){
-//        ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, Double.MAX_VALUE, new ArrayList<>(), new HashSet<>());
-//        assertNotNull(result);
-//        assertEquals("A", result.get(0).getValue().getName());
-//        assertEquals("E", result.get(result.size() - 1).getValue().getName());
-//        assertEquals(5, result.size());
-//    }
-
     //Advanced
 
     //Causing Errors
-//    @Test
-//    public void testShortestPathByWeight_Dijkstra_Waypoint() {
-//        ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, 0, waypoints, new HashSet<>());
-//        assertNotNull(result);
-//        System.out.println(result);
-//        assertEquals("A", result.get(0).getValue().getName());
-//        assertEquals("E", result.get(3).getValue().getName());
-//        assertEquals("B", result.get(6).getValue().getName());
-//        assertEquals("E", result.get(result.size() - 1).getValue().getName());
-//        assertEquals(10, result.size());
-//    }
+    @Test
+    public void testShortestPathByWeight_Dijkstra_Waypoint() {
+        ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, 0, waypoints, new HashSet<>());
+        assertNotNull(result);
+        System.out.println(result);
+        assertEquals("A", result.get(0).getValue().getName());
+        assertEquals("E", result.get(3).getValue().getName());
+        assertEquals("B", result.get(6).getValue().getName());
+        assertEquals("E", result.get(result.size() - 1).getValue().getName());
+        assertEquals(10, result.size());
+    }
 
     @Test
     public void testAllPathsBetweenNodes_DFS_Waypoint(){
@@ -133,6 +121,7 @@ public class GraphTest {
         assertEquals("E", result.get(result.size() - 1).getValue().getName());
         assertEquals(8, result.size());
     }
+
 
 
 }
