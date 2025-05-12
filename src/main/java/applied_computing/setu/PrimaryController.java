@@ -100,13 +100,7 @@ public class PrimaryController {
         return radioButtons.toArray(new RadioButton[0]);
     }
 
-    private void connectNodes() {
-        for (Map.Entry<RadioButton, GraphNode<Station>> entry : stationHashMap.entrySet()) {
-            GraphNode<Station> node = entry.getValue();
-            RadioButton key = entry.getKey();
-            node.setAdjacencyList(getAdjacencyListForANode(node));
-        }
-    }
+    private void connectNodes() {for (Map.Entry<RadioButton, GraphNode<Station>> entry : stationHashMap.entrySet()) entry.getValue().setAdjacencyList(getAdjacencyListForANode(entry.getValue()));}
 
     private HashMap<GraphNode<Station>, Double> getAdjacencyListForANode(GraphNode<Station> node) {
         HashMap<GraphNode<Station>, Double> adjacencyList = new HashMap<>();
@@ -181,9 +175,7 @@ public class PrimaryController {
     }
 
 
-    public void setAllRadioButtonsDisabled(boolean disable) {
-        setRadioButtonsDisabledRecursive(pane, disable);
-    }
+    public void setAllRadioButtonsDisabled(boolean disable) {setRadioButtonsDisabledRecursive(pane, disable);}
 
     private void setRadioButtonsDisabledRecursive(Pane parent, boolean disable) {
         for (Node node : parent.getChildren()) {
@@ -205,23 +197,17 @@ public class PrimaryController {
         // Disable buttons as needed
         startPointButton.setDisable(true);
         endPointButton.setDisable(true);
-
-        // Enable radio buttons for station selection
         setAllRadioButtonsDisabled(false);
-
-        // Handle visited and avoiding stations button toggle
-        if (event.getSource() == startPointButton) {
+        if (event.getSource() == startPointButton) {// Handling visited and avoiding stations button toggle
             isStartPointSelected = true;
-            isMultipleSelectionAllowed = false; // Allow only one selection
+            isMultipleSelectionAllowed = false; // Allowing only one selection
             keepSomeButtonsDisabled(stationsAvoidVbox);
         } else if (event.getSource() == endPointButton) {
             isStartPointSelected = false;
-            isMultipleSelectionAllowed = false; // Allow only one selection
+            isMultipleSelectionAllowed = false; // Allowing only one selection
             keepSomeButtonsDisabled(stationsAvoidVbox);
         } else if (event.getSource() == visitedStationsButton) {
-            // Toggle visited stations selection
-            if (isVisitedButtonSelected) {
-                // Stop selecting
+            if (isVisitedButtonSelected) {// Toggle visited stations selection
                 isVisitedButtonSelected = false;
                 visitedStationsButton.setText("Start Selecting Waypoint Stations");
                 setAllRadioButtonsDisabled(true);
@@ -233,20 +219,17 @@ public class PrimaryController {
                 costPenaltyField.setDisable(false);
                 findRoute();
             } else {
-                // Start selecting
-                isVisitedButtonSelected = true;
+                isVisitedButtonSelected = true;// Start selecting
                 isMultipleSelectionAllowed = true;
                 visitedStationsButton.setText("Stop Selecting");
                 avoidingStationsButton.setDisable(true); // Disable avoiding button while selecting
                 selectedModeChoiceBox.setDisable(true);
                 costPenaltyField.setDisable(true);
-                keepSomeButtonsDisabled(stationsAvoidVbox);
+                keepSomeButtonsDisabled(stationsAvoidVbox);// so the user cannot create logical error and select waypoint station as a station to avoid or desselect it accidentally
             }
-        } else if (event.getSource() == avoidingStationsButton) {
-            // Toggle avoiding stations selection
+        } else if (event.getSource() == avoidingStationsButton) {// Toggle avoiding stations selection
             if (isAvoidingButtonSelected) {
-                // Stop selecting
-                isAvoidingButtonSelected = false;
+                isAvoidingButtonSelected = false;// Stop selecting
                 avoidingStationsButton.setText("Start Selecting Stations To Avoid");
                 setAllRadioButtonsDisabled(true);
                 startPointButton.setDisable(false);
@@ -257,14 +240,13 @@ public class PrimaryController {
                 costPenaltyField.setDisable(false);
                 findRoute();
             } else {
-                // Start selecting
-                isAvoidingButtonSelected = true;
+                isAvoidingButtonSelected = true;// Start selecting
                 isMultipleSelectionAllowed = true;
                 avoidingStationsButton.setText("Stop Selecting");
-                visitedStationsButton.setDisable(true); // Disable visited button while selecting
+                visitedStationsButton.setDisable(true);
                 selectedModeChoiceBox.setDisable(true);
                 costPenaltyField.setDisable(true);
-                keepSomeButtonsDisabled(stationsVBox);
+                keepSomeButtonsDisabled(stationsVBox);// so the user cannot create logical error and select waypoint station as a station to avoid or desselect it accidentally
             }
         }
     }
@@ -272,15 +254,13 @@ public class PrimaryController {
 
     @FXML
     private void oneRadioButtonPressingWaiting(javafx.event.ActionEvent event) {
-        // Get the source of the event (the clicked RadioButton)
+        // Getting the source of the event (the clicked RadioButton)
         RadioButton selectedRadioButton = (RadioButton) event.getSource();
-
-        // Format the station name (replace underscores with spaces)
+        // Formating the station name (replace underscores with spaces)
         String formattedStationName = selectedRadioButton.getTooltip().getText().trim();
-
         VBox targetVBox;
         boolean waypointsSelection = false;
-        // Check the source of the event and determine the corresponding VBox
+        // Checking the source of the event and determine the corresponding VBox
         if (isVisitedButtonSelected) {
             targetVBox = stationsVBox; // Use stationsVBox if visitedStationsButton is pressed
             waypointsSelection = true;
@@ -297,36 +277,34 @@ public class PrimaryController {
             targetVBox = new VBox();
             selectedRadioButton.setStyle("-fx-mark-color: orange;");
         }
-
         // If multiple selection is allowed
         if (isMultipleSelectionAllowed) {
-            // Create a new label for the station
+            // Creating a new label for the station
             Label stationLabel = new Label(formattedStationName);
             GraphNode<Station> stationNode = new GraphNode<>(new Station(formattedStationName, new byte[]{}));
-            // Check if the RadioButton is selected or deselected
+            // Checking if the RadioButton is selected or deselected
             if (selectedRadioButton.isSelected()) {
-                // Add the label to the corresponding VBox (if not already added)
+                // Adding the label to the corresponding VBox (if not already added)
                 if (!isLabelInVBox(stationLabel, targetVBox)) {
                     targetVBox.getChildren().add(stationLabel);
                     if (waypointsSelection) waypointStations.add(stationNode); else stationsToAvoid.add(stationNode);
                 }
             } else {
-                // Remove the label from the corresponding VBox if the RadioButton is deselected
+                // Removing the label from the corresponding VBox if the RadioButton is deselected
                 removeLabelFromVBox(formattedStationName, targetVBox);
                 if (waypointsSelection) waypointStations.remove(stationNode); else stationsToAvoid.remove(stationNode);
             }
         } else {
-            // If multiple selection is not allowed, update the start or end point label
+            // If multiple selection is not allowed, updating the start or end point label
             if (isStartPointSelected) {
                 startPointLabel.setText(formattedStationName);
             } else {
                 endPointLabel.setText(formattedStationName);
             }
-
-            // Disable radio buttons when only one selection is allowed
+            // Disabling radio buttons when only one selection is allowed
             setAllRadioButtonsDisabled(true);
 
-            // Re-enable buttons after one radio button is selected
+            // Re-enabling buttons after one radio button is selected
             startPointButton.setDisable(false);
             endPointButton.setDisable(false);
             visitedStationsButton.setDisable(false);
@@ -346,7 +324,7 @@ public class PrimaryController {
     }
 
     @FXML
-    private void keepSomeButtonsDisabled(VBox vbox) {
+    private void keepSomeButtonsDisabled(VBox vbox) {//checking all the radiobutton nodes and if it belongs to any of the known lists, do not display it
         for (Node node : pane.getChildren()) {
             if (!(node instanceof RadioButton)) continue;
             RadioButton radioButton = (RadioButton) node;
@@ -360,23 +338,17 @@ public class PrimaryController {
     private void deselectExcessiveButtons() {
         for (Node node : pane.getChildren()) {
             if (!(node instanceof RadioButton)) continue;
-
             RadioButton radioButton = (RadioButton) node;
             String tooltipText = radioButton.getTooltip().getText();
-
             boolean isStart = tooltipText.equalsIgnoreCase(startPointLabel.getText());
             boolean isEnd = tooltipText.equalsIgnoreCase(endPointLabel.getText());
             boolean isVisited = isLabelInVBox(tooltipText, stationsVBox);
             boolean isAvoided = isLabelInVBox(tooltipText, stationsAvoidVbox);
-
-            if (!(isStart || isEnd || isVisited || isAvoided)) {
-                radioButton.setSelected(false);
-            }
+            if (!(isStart || isEnd || isVisited || isAvoided)) radioButton.setSelected(false);
         }
     }
 
 
-    // Utility method to check if the label is already in the VBox
     private boolean isLabelInVBox(Label stationLabel, VBox targetVBox) {
         for (javafx.scene.Node node : targetVBox.getChildren()) {
             if (node instanceof Label) {
@@ -387,14 +359,13 @@ public class PrimaryController {
         return false;
     }
 
-    // Utility method to remove a label from the VBox based on its text
     private void removeLabelFromVBox(String labelText, VBox targetVBox) {
         for (javafx.scene.Node node : targetVBox.getChildren()) {
             if (node instanceof Label) {
                 Label label = (Label) node;
                 if (label.getText().equals(labelText)) {
                     targetVBox.getChildren().remove(label);
-                    break;  // Exit the loop once the label is removed
+                    break;
                 }
             }
         }
@@ -404,21 +375,16 @@ public class PrimaryController {
     private void findRoute() {
         String startName = startPointLabel.getText();
         String endName = endPointLabel.getText();
-
         RadioButton startButton = null;
         RadioButton endButton = null;
-
         for (RadioButton rb : getAllRadioButtons()) {
-            String stationName = rb.getTooltip().getText(); // Normalize name
+            String stationName = rb.getTooltip().getText();
             if (stationName.equalsIgnoreCase(startName)) startButton = rb;
             if (stationName.equalsIgnoreCase(endName)) endButton = rb;
         }
-
         if (startButton == null || endButton == null) return;
-
         GraphNode<Station> startNode = stationHashMap.get(startButton);
         GraphNode<Station> endNode = stationHashMap.get(endButton);
-
         if (startNode == null || endNode == null) return;
         if (selectedModeChoiceBox.getValue().equals("All routes")) {
             multiplePathArrayList = graph.allPathsBetweenNodes(startNode, endNode, waypointStations, stationsToAvoid);
@@ -429,11 +395,11 @@ public class PrimaryController {
             double laneChangePenalty = costPenaltyField.getText().isEmpty() ? 0 : Double.parseDouble(costPenaltyField.getText());
             drawLines(graph.shortestPathBetweenStationsWithOrder(startNode, endNode, laneChangePenalty, waypointStations, stationsToAvoid));
         }
-        toGrayScale(true);
+        toGrayScale(true);//make a map to grayscale so the route is clearly visible
     }
 
     @FXML
-    private void cycleMultiplePaths() {
+    private void cycleMultiplePaths() {//a method for all paths, so you can see them one at a time
         if (multiplePathArrayList == null || multiplePathArrayList.isEmpty()) return;
         pathCounter = (pathCounter + 1) % multiplePathArrayList.size();
         drawLines(multiplePathArrayList.get(pathCounter));
@@ -441,11 +407,11 @@ public class PrimaryController {
 
     @FXML
     private void drawLines(ArrayList<GraphNode<Station>> solutionPath) {
-        clearLines();
-        HashSet<GraphNode<Station>> waypoints = new HashSet<>(waypointStations);
+        clearLines();//clear previous lines
+        HashSet<GraphNode<Station>> waypoints = new HashSet<>(waypointStations);//hashset for waypoints as order matters for them
         if (solutionPath == null || solutionPath.isEmpty()) return;
         Color currentColor = getNextColor();
-        for (int i = 0; i < solutionPath.size() - 1; i++) {
+        for (int i = 0; i < solutionPath.size() - 1; i++) {//cycling though all the array nodes and seek for all the paths, adn draw lines between them
             GraphNode<Station> fromNode = solutionPath.get(i);
             GraphNode<Station> toNode = solutionPath.get(i + 1);
             currentColor = waypoints.remove(fromNode) ? getNextColor() : currentColor;
@@ -468,16 +434,14 @@ public class PrimaryController {
     }
 
     @FXML
-    private void clearLines() {
-        pane.getChildren().removeIf(node -> node instanceof Line);
-    }
+    private void clearLines() {pane.getChildren().removeIf(node -> node instanceof Line);}
 
     private void toGrayScale(boolean state) {
-        String imageFileName = state ? "grayImage.png" : "U-Bahn_Wien.png";
+        String imageFileName = state ? "grayImage.png" : "U-Bahn_Wien.png";//this method just changes original image to the greyscale one, for simplicity
         imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imageFileName))));
     }
 
-    private void addColors() {
+    private void addColors() {//method for changing colors, when waypoints are added
         colors[0] = Color.RED;
         colors[1] = Color.AQUA;
         colors[2] = Color.BLUE;

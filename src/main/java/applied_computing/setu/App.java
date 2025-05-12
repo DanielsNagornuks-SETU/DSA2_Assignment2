@@ -23,10 +23,8 @@ public class App extends Application {
         stage.show();
     }
 
-    private void setIcon(Stage stage) {
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("app-icon.png")));
-        /* <a href="https://www.flaticon.com/free-icons/metro" title="metro icons">Metro icons created by Smashicons - Flaticon</a> */
-    }
+    private void setIcon(Stage stage) {stage.getIcons().add(new Image(getClass().getResourceAsStream("app-icon.png")));}
+    /* <a href="https://www.flaticon.com/free-icons/metro" title="metro icons">Metro icons created by Smashicons - Flaticon</a> */
 
     private static Parent loadFXML() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("primary" + ".fxml"));
