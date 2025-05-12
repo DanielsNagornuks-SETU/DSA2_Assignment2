@@ -59,7 +59,7 @@ public class GraphTest {
 
     @Test
     public void testShortestPathByWeight_Dijkstra() {
-        ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, 0, waypoints, new HashSet<>());
+        ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, 0, new ArrayList<>(), new HashSet<>());
         assertNotNull(result);
         assertEquals("A", result.get(0).getValue().getName());
         assertEquals("E", result.get(result.size() - 1).getValue().getName());
