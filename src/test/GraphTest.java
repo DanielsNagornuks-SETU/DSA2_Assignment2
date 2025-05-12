@@ -13,6 +13,7 @@ public class GraphTest {
     private Graph<Station> graph;
     private GraphNode<Station> A, B, C, D, E;
     ArrayList<GraphNode<Station>> waypoints;
+    HashSet<GraphNode<Station>> avoid;
 
     @BeforeEach
     public void setUp() {
@@ -33,6 +34,9 @@ public class GraphTest {
         waypoints = new ArrayList<>();
         waypoints.add(E);
         waypoints.add(B);
+
+        avoid = new HashSet<>();
+        avoid.add(C);
     }
 
     //Basic
@@ -82,7 +86,6 @@ public class GraphTest {
     public void testShortestPathByWeight_Dijkstra_Waypoint() {
         ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, 0, waypoints, new HashSet<>());
         assertNotNull(result);
-        System.out.println(result);
         assertEquals("A", result.get(0).getValue().getName());
         assertEquals("E", result.get(3).getValue().getName());
         assertEquals("B", result.get(6).getValue().getName());
@@ -114,12 +117,38 @@ public class GraphTest {
     public void testShortestPathByNodes_BFS_Waypoint(){
         ArrayList<GraphNode<Station>> result = graph.shortestPathByNodes(A,E,waypoints, new HashSet<>());
         assertNotNull(result);
-        System.out.println("BFS_WayPoint_Test" + result);
         assertEquals("A", result.get(0).getValue().getName());
         assertEquals("E", result.get(3).getValue().getName());
         assertEquals("B", result.get(5).getValue().getName());
         assertEquals("E", result.get(result.size() - 1).getValue().getName());
         assertEquals(8, result.size());
+    }
+
+    @Test
+    public void testShortestPathByWeight_Dijkstras_Avoid(){
+        ArrayList<GraphNode<Station>> result = graph.shortestPathBetweenStationsWithOrder(A, E, 0, new ArrayList<>(), avoid);
+        assertNotNull(result);
+        assertEquals("A", result.get(0).getValue().getName());
+        assertEquals("E", result.get(result.size() - 1).getValue().getName());
+        assertFalse(result.contains(C));
+        assertEquals(4, result.size());
+    }
+
+    @Test
+    public void testAllPathsBetweenNodes_DFS_Avoid(){
+        ArrayList<ArrayList<GraphNode<Station>>> paths = graph.allPathsBetweenNodes(A,E, new ArrayList<>(), avoid);
+        assertNotNull(paths);
+        assertFalse(paths.isEmpty());
+        assertEquals(1, paths.size());
+        assertFalse(paths.get(0).contains(C));
+    }
+
+    @Test
+    public void testShortestPathByNodes_BFS_Avoid(){
+        ArrayList<GraphNode<Station>> result = graph.shortestPathByNodes(A,E, new ArrayList<>(), avoid);
+        assertNotNull(result);
+        assertEquals(4, result.size());
+        assertFalse(result.contains(C));
     }
 
 
