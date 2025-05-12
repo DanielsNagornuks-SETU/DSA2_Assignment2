@@ -46,5 +46,15 @@ public class GraphTest {
         assertEquals("A", result.get(0).getValue());
         assertEquals("E", result.get(result.size() - 1).getValue());
     }
+
+    @Test
+    public void testShortestPathByNodes_BFS(){
+        ArrayList<GraphNode<String>> result = graph.shortestPathByNodes(A, E, new HashSet<>());
+        assertNotNull(result);
+        assertEquals("A", result.get(0).getValue());
+        assertEquals("E", result.get(result.size() - 1).getValue());
+    }
+
+
 }
 
